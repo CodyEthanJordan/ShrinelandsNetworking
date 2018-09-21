@@ -7,7 +7,7 @@
   
  class LinuxHeadlessBuilder {
      static void build() {
-         string[] scenes = {"Assets/Main.unity"};
+         string[] scenes = {"Assets/Scenes/Server.unity"};
          BuildPipeline.BuildPlayer(scenes, "build\\linux\\linux64headless", BuildTarget.StandaloneLinux64, BuildOptions.EnableHeadlessMode);
      }
  }
