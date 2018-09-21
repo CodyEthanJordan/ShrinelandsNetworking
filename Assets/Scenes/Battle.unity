@@ -467,7 +467,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1072180270}
-        m_MethodName: SendSocketMessage
+        m_MethodName: SendTestMessage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -537,11 +537,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1072180269}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4d551210956f5d44a9e619e50865b05, type: 3}
+  m_Script: {fileID: 11500000, guid: ea3919d664597de4c81e1282443a3445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AuthorotativeServer: 0
-  MessageTimer: 0
 --- !u!4 &1072180271
 Transform:
   m_ObjectHideFlags: 0

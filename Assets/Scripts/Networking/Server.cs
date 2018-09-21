@@ -11,13 +11,12 @@ namespace Assets.Scripts.Networking
 {
     public class Server : MonoBehaviour
     {
-        public bool AuthorotativeServer;
         public float MessageTimer = 0;
 
         public readonly int maxConnections = 5;
 
         int reliableChannelID;
-        int socketID;
+        int hostID;
         int socketPort = 8888;
         int connectionID;
 
@@ -27,34 +26,14 @@ namespace Assets.Scripts.Networking
             ConnectionConfig config = new ConnectionConfig();
             reliableChannelID = config.AddChannel(QosType.Reliable);
             HostTopology topology = new HostTopology(config, maxConnections);
-            if(AuthorotativeServer)
-            {
-                socketID = NetworkTransport.AddHost(topology, socketPort);
-            }
-            else
-            {
-                socketID = NetworkTransport.AddHost(topology, socketPort + 1);
-            }
-            Debug.Log("Socket Open. SocketId is: " + socketID);
-        }
-
-        public void SendSocketMessage()
-        {
-            byte error;
-            byte[] buffer = new byte[1024];
-            Stream stream = new MemoryStream(buffer);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, "HelloServer");
-
-            int bufferSize = 1024;
-
-            NetworkTransport.Send(socketID, connectionID, reliableChannelID, buffer, bufferSize, out error);
+            hostID = NetworkTransport.AddHost(topology, socketPort);
+            Debug.Log("Socket Open. SocketId is: " + hostID);
         }
 
         public void Connect()
         {
             byte error;
-            connectionID = NetworkTransport.Connect(socketID, "127.0.0.1", socketPort, 0, out error);
+            connectionID = NetworkTransport.Connect(hostID, "127.0.0.1", socketPort, 0, out error);
             Debug.Log("Connected to server. ConnectionId: " + connectionID);
         }
 
@@ -76,6 +55,7 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received");
+                    SendInfo(recHostId, recConnectionId);
                     break;
                 case NetworkEventType.DataEvent:
                     Stream stream = new MemoryStream(recBuffer);
@@ -88,5 +68,19 @@ namespace Assets.Scripts.Networking
                     break;
             }
         }
+
+        void SendInfo(int hostID, int connectionID)
+        {
+            byte error;
+            byte[] buffer = new byte[1024];
+            Stream stream = new MemoryStream(buffer);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, "Before you lies a deadly dragon!");
+
+            int bufferSize = 1024;
+
+            NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, bufferSize, out error);
+        }
+
     }
 }
