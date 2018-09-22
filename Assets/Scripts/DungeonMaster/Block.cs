@@ -7,7 +7,7 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Block
     {
-        public Guid ID;
+        //public Guid ID;
 
         public string Name;
         public bool Solid;
@@ -15,11 +15,12 @@ namespace Assets.Scripts.DungeonMaster
 
         Block()
         {
-            ID = Guid.NewGuid();
+            //ID = Guid.NewGuid();
         }
 
         Block(string name, bool solid, int moveCost)
         {
+            //this.ID = Guid.NewGuid();
             this.Name = name;
             this.Solid = solid;
             this.MoveCost = moveCost;

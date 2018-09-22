@@ -25,13 +25,13 @@ namespace Assets.Scripts.DungeonMaster
         {
             for (int i = 0; i < x; i++)
             {
-                Blocks[i] = new List<List<Block>>();
+                Blocks.Add(new List<List<Block>>());
                 for (int j = 0; j < y; j++)
                 {
-                    Blocks[i][j] = new List<Block>();
+                    Blocks[i].Add(new List<Block>());
                     for (int k = 0; k < z; k++)
                     {
-                        Blocks[i][j][k] = Block.GetDebugAir();
+                        Blocks[i][j].Add(Block.GetDebugAir());
                     }
                 }
             }

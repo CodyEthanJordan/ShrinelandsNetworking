@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
+
 using UnityEngine;
 
 namespace Assets.Scripts.DungeonMaster
@@ -40,7 +42,7 @@ namespace Assets.Scripts.DungeonMaster
 
             return defaultBattle;
         }
-
+        
         public void MakeMove(Guid unitID, Map.Direction direction)
         {
 
