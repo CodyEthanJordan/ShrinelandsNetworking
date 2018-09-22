@@ -7,11 +7,22 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Map
     {
-        public List<List<List<Block>>> Blocks;
+        public List<List<List<Block>>> Blocks = new List<List<List<Block>>>();
 
-        Map(int x, int y, int z)
+        public List<int> Shape
         {
-            Blocks = new List<List<List<Block>>>();
+            get
+            {
+                var shape = new List<int>();
+                shape.Add(Blocks.Count);
+                shape.Add(Blocks[0].Count);
+                shape.Add(Blocks[0][0].Count);
+                return shape;
+            }
+        }
+
+        public Map(int x, int y, int z)
+        {
             for (int i = 0; i < x; i++)
             {
                 Blocks[i] = new List<List<Block>>();
@@ -24,6 +35,29 @@ namespace Assets.Scripts.DungeonMaster
                     }
                 }
             }
+        }
+
+        public static Map GetDebugMap()
+        {
+            var debugMap = new Map(10, 10, 6);
+
+            for (int i = 0; i < debugMap.Shape[0]; i++)
+            {
+                for (int j = 0; j < debugMap.Shape[1]; j++)
+                {
+                    for (int k = 0; k < debugMap.Shape[2]/2; k++)
+                    {
+                        debugMap.Blocks[i][j][k] = Block.GetDebugDirt();
+                    }
+                }
+            }
+
+            return debugMap;
+        }
+
+        public enum Direction
+        {
+            North, South, East, West, Up, Down
         }
     }
 }

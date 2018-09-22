@@ -6,6 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using Assets.Scripts.DungeonMaster;
 
 namespace Assets.Scripts.Networking
 {
@@ -14,6 +15,8 @@ namespace Assets.Scripts.Networking
         public float MessageTimer = 0;
 
         public readonly int maxConnections = 5;
+
+        public Battle battle;
 
         int reliableChannelID;
         int hostID;
@@ -28,6 +31,8 @@ namespace Assets.Scripts.Networking
             HostTopology topology = new HostTopology(config, maxConnections);
             hostID = NetworkTransport.AddHost(topology, socketPort);
             Debug.Log("Socket Open. SocketId is: " + hostID);
+
+            battle = Battle.GetDebugBattle();
         }
 
         public void Connect()
