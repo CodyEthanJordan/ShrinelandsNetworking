@@ -9,12 +9,13 @@ using UnityEngine.Networking;
 
 namespace Assets.Scripts.Networking
 {
-    public class Client : MonoBehaviour
+    public class Client : NetworkManager
     {
         private int connectionID;
-        private int hostID;
         private int serverSocketPort = 8888;
-        private int reliableChannelID;
+
+        private float heartbeatTimer;
+        private float heartbeatRate = 0.5f;
 
         private void Start()
         {
@@ -45,6 +46,23 @@ namespace Assets.Scripts.Networking
             NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, bufferSize, out error);
         }
 
+        private void SendToServer(string message)
+        {
+            byte error;
+            byte[] buffer = new byte[message.Length];
+            Stream stream = new MemoryStream(buffer);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, message);
+
+            NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, message.Length, out error);
+
+            if ((NetworkError)error != NetworkError.Ok)
+            {
+                Debug.LogError("Networking error : " + (NetworkError)error);
+            }
+        }
+
+
         private void Update()
         {
             int recHostId;
@@ -69,7 +87,7 @@ namespace Assets.Scripts.Networking
                     BinaryFormatter formatter = new BinaryFormatter();
                     string message = formatter.Deserialize(stream) as string;
                     Debug.Log("incoming message event received: ");
-                    Debug.Log(Server.Unzip(Encoding.UTF8.GetBytes(message)));
+                    Debug.Log(Unzip(Encoding.UTF8.GetBytes(message)));
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
@@ -77,7 +95,14 @@ namespace Assets.Scripts.Networking
             }
         }
 
-
-
+        private void Heartbeat()
+        {
+            heartbeatTimer += Time.deltaTime;
+            if(heartbeatTimer > heartbeatRate)
+            {
+                heartbeatTimer = 0;
+                SendToServer("heartbeat");
+            }
+        }
     }
 }
