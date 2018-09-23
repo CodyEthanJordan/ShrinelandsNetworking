@@ -117,6 +117,10 @@ namespace Assets.Scripts.Networking
 
             this.battle = JsonConvert.DeserializeObject<Battle>(battleJson);
 
+            Battle otherBatlte = JsonConvert.DeserializeObject<Battle>(battleJson.Replace("\\", string.Empty));
+
+            Battle battl2 = JsonConvert.DeserializeObject<Battle>(battleJson);
+
             if(OnRecieveBattle != null)
             {
                 OnRecieveBattle(this, this.battle);

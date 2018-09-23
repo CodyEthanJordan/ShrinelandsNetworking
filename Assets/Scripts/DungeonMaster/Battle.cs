@@ -16,14 +16,14 @@ namespace Assets.Scripts.DungeonMaster
         public List<Side> sides = new List<Side>();
         public List<Unit> units = new List<Unit>();
 
-        public Battle()
+        public Battle(string blah)
         {
             ID = Guid.NewGuid();
         }
 
         public static Battle GetDebugBattle()
         {
-            var defaultBattle = new Battle();
+            var defaultBattle = new Battle("blah");
 
             defaultBattle.map = Map.GetDebugMap();
 
