@@ -9,7 +9,7 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Unit
     {
-        public Guid ID { get; protected set; }
+        public Guid ID;
         public Guid SideID { get; protected set; }
         public string Name { get; protected set; }
 

@@ -10,20 +10,20 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Battle
     {
-        public Guid ID { get; private set; }
+        public Guid ID;
 
         public Map map;
         public List<Side> sides = new List<Side>();
         public List<Unit> units = new List<Unit>();
 
-        public Battle(string blah)
+        public Battle()
         {
             ID = Guid.NewGuid();
         }
 
         public static Battle GetDebugBattle()
         {
-            var defaultBattle = new Battle("blah");
+            var defaultBattle = new Battle();
 
             defaultBattle.map = Map.GetDebugMap();
 

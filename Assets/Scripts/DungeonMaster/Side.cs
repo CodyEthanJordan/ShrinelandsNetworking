@@ -7,7 +7,7 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Side
     {
-        public Guid ID { get; protected set; }
+        public Guid ID;
         public string Name { get; protected set; }
         public string Color { get; protected set; }
 

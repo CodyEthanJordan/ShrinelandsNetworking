@@ -7,8 +7,6 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Block
     {
-        //public Guid ID;
-
         public string Name;
         public bool Solid;
         public int MoveCost;

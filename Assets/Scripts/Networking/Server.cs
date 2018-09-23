@@ -76,8 +76,6 @@ namespace Assets.Scripts.Networking
             string json = JsonConvert.SerializeObject(battle, Formatting.None);
             var bytes = Zip(json);
             Debug.Log("Sending battle info to " + hostID);
-            Debug.Log(bytes);
-            Debug.Log(bytes.Length);
             NetworkTransport.Send(hostID, connectionID, reliableChannelID, bytes, bytes.Length, out error);
         }
 
