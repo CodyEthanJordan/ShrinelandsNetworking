@@ -62,6 +62,10 @@ namespace Assets.Scripts.Networking
             }
         }
 
+        private void RequestBattle()
+        {
+            SendToServer("request battle");
+        }
 
         private void Update()
         {
@@ -86,8 +90,7 @@ namespace Assets.Scripts.Networking
                     Stream stream = new MemoryStream(recBuffer);
                     BinaryFormatter formatter = new BinaryFormatter();
                     string message = formatter.Deserialize(stream) as string;
-                    Debug.Log("incoming message event received: ");
-                    Debug.Log(Unzip(Encoding.UTF8.GetBytes(message)));
+                    Debug.Log("incoming message event received:  " + message);
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");

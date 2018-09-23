@@ -16,8 +16,8 @@ namespace Assets.Scripts.Networking
     {
         public readonly int maxConnections = 5;
 
-        int socketPort = 8888;
-        int connectionID;
+        private int socketPort = 8888;
+        private int connectionID;
 
         private void Start()
         {
@@ -26,7 +26,9 @@ namespace Assets.Scripts.Networking
             reliableChannelID = config.AddChannel(QosType.Reliable);
             HostTopology topology = new HostTopology(config, maxConnections);
             hostID = NetworkTransport.AddHost(topology, socketPort);
-            Debug.Log("Socket Open. SocketId is: " + hostID);
+            Debug.Log("Socket Open. hostID is: " + hostID);
+
+            //create debug battle
             battle = Battle.GetDebugBattle();
        }
 
@@ -62,6 +64,10 @@ namespace Assets.Scripts.Networking
                     BinaryFormatter formatter = new BinaryFormatter();
                     string message = formatter.Deserialize(stream) as string;
                     Debug.Log("incoming message event received: " + message);
+                    if(message == "heartbeat")
+                    {
+                        Debug.Log("Hey " + recHostId + " is still alive");
+                    }
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
