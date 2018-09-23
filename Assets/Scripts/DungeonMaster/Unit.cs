@@ -28,8 +28,8 @@ namespace Assets.Scripts.DungeonMaster
         public static Unit GetDefaultDude(string name, Guid sideID, Vector3Int pos)
         {
             var dude = new Unit(name, sideID, pos);
-            dude.HP = 8;
-            dude.Movement = 5;
+            dude.HP = new Stat(8,8);
+            dude.Movement = new Stat(5,5);
 
             return dude;
         }
