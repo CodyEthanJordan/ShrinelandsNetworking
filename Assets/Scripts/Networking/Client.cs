@@ -31,6 +31,11 @@ namespace Assets.Scripts.Networking
             hostID = NetworkTransport.AddHost(topology, serverSocketPort + 1);
         }
 
+        internal void MoveUnit(Guid unitRepresented, Vector3Int position)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ConnectToServer(string address)
         {
             byte error;

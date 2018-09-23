@@ -14,6 +14,7 @@ namespace Assets.Scripts.Controllers
     {
         public GameObject BlockPrefab;
         public GameObject UnitPrefab;
+        public GameObject TargetCubePrefab;
         public Camera Cam;
 
         public float Speed;
@@ -27,11 +28,14 @@ namespace Assets.Scripts.Controllers
 
         [SerializeField] private Text serverIPText;
         [SerializeField] private GameObject connectionPanel;
-        [SerializeField] private Client client;
+        public Client client;
 
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
         private List<UnitRenderer> units = new List<UnitRenderer>();
+        private List<GameObject> targetCubes = new List<GameObject>();
         private Animator FSM;
+
+        public event TargetClickedEvent OnTargetClick;
 
         private void Awake()
         {
@@ -71,6 +75,13 @@ namespace Assets.Scripts.Controllers
                         SelectedUnit = hit.transform.gameObject.GetComponent<UnitRenderer>();
                         FSM.SetTrigger("UnitClicked");
                     }
+                    else if(hit.transform.gameObject.CompareTag("Target"))
+                    {
+                        if(OnTargetClick != null)
+                        {
+                            OnTargetClick(this, hit.transform.position);
+                        }
+                    }
                     else
                     {
                         FSM.SetTrigger("Deselect"); //TODO: let FSM handle this stuff
@@ -88,6 +99,17 @@ namespace Assets.Scripts.Controllers
         public void HideUnitStats()
         {
             unitInfoPanel.gameObject.SetActive(false);
+        }
+
+        public void RenderMovementOptions(Guid unitRepresented)
+        {
+            RemoveTargets();
+            foreach (var pos in client.battle.GetValidMovements(unitRepresented))
+            {
+                var newCube = Instantiate(TargetCubePrefab, this.transform, true);
+                newCube.transform.position = new Vector3(pos.x, pos.z, pos.y);
+                targetCubes.Add(newCube);
+            }
         }
 
         private void HandleCameraMovement()
@@ -109,8 +131,18 @@ namespace Assets.Scripts.Controllers
 
         }
 
+        public void RemoveTargets()
+        {
+            foreach (var cube in targetCubes)
+            {
+                Destroy(cube);
+            }
+            targetCubes.Clear();
+        }
+
         private void CleanUp()
         {
+            RemoveTargets();
             foreach (var block in blocks)
             {
                 Destroy(block.gameObject);
@@ -169,4 +201,6 @@ namespace Assets.Scripts.Controllers
             client.ConnectToServer(serverIPText.text);
         }
     }
+
+    public delegate void TargetClickedEvent(object source, Vector3 position);
 }

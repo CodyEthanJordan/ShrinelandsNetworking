@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.DungeonMaster
 {
@@ -37,6 +38,11 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
+        public Block BlockAt(Vector3Int pos)
+        {
+            return Blocks[pos.x][pos.y][pos.z];
+        }
+
         public static Map GetDebugMap()
         {
             var debugMap = new Map(15, 10, 6);
@@ -59,5 +65,10 @@ namespace Assets.Scripts.DungeonMaster
         {
             North, South, East, West, Up, Down
         }
+
+        public static readonly List<Vector3Int> CardinalDirections = new List<Vector3Int>()
+        {
+            Vector3Int.up, Vector3Int.right, Vector3Int.down, Vector3Int.left
+        };
     }
 }
