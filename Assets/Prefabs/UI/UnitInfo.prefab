@@ -125,7 +125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72016583467f66d46ae129d081781e45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: {fileID: 0}
+  unitName: {fileID: 114488336951220490}
+  hp: {fileID: 114177350894268364}
+  move: {fileID: 114635858417132624}
 --- !u!114 &114488336951220490
 MonoBehaviour:
   m_ObjectHideFlags: 1

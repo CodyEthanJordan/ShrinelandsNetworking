@@ -44,6 +44,7 @@ namespace Assets.Scripts.Controllers
             client.OnRecieveBattle += InitializeBattle;
 
             mouseLook.enabled = false;
+            unitInfoPanel.gameObject.SetActive(false);
         }
 
         private void Update()

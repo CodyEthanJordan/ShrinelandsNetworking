@@ -30,14 +30,14 @@ namespace Assets.Scripts.DungeonMaster
             defaultBattle.sides.Add(new Side("The Player", "#0000FF"));
             defaultBattle.sides.Add(new Side("The Foe", "#FF0000"));
 
-            defaultBattle.units.Add(new Unit("Charlie", defaultBattle.sides[0].ID,
+            defaultBattle.units.Add(Unit.GetDefaultDude("Charlie", defaultBattle.sides[0].ID,
                 new Vector3Int(0,0,3)));
-            defaultBattle.units.Add(new Unit("Robby", defaultBattle.sides[0].ID,
+            defaultBattle.units.Add(Unit.GetDefaultDude("Robby", defaultBattle.sides[0].ID,
                 new Vector3Int(1,0,3)));
 
-            defaultBattle.units.Add(new Unit("JJ", defaultBattle.sides[1].ID,
+            defaultBattle.units.Add(Unit.GetDefaultDude("JJ", defaultBattle.sides[1].ID,
                 new Vector3Int(5,5,3)));
-            defaultBattle.units.Add(new Unit("Zach", defaultBattle.sides[1].ID,
+            defaultBattle.units.Add(Unit.GetDefaultDude("Zach", defaultBattle.sides[1].ID,
                 new Vector3Int(5,6,3)));
 
             return defaultBattle;
