@@ -28,12 +28,12 @@ namespace Assets.Scripts.DungeonMaster
 
         public static Block GetDebugDirt()
         {
-            return new Block("Dirt", true, 1);
+            return new Block("dirt", true, 1);
         }
 
         public static Block GetDebugAir()
         {
-            return new Block("Air", false, 1);
+            return new Block("air", false, 1);
         }
     }
 }

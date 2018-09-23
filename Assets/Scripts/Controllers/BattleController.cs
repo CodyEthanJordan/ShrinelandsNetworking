@@ -48,7 +48,7 @@ namespace Assets.Scripts.Controllers
                         var newBlock = Instantiate(BlockPrefab, this.transform, true);
                         newBlock.transform.position = new Vector3(i, j, k);
                         var br = newBlock.GetComponent<BlockRenderer>();
-                        br.Become(battle.map.Blocks[i][j][k].Name);
+                        br.Become(battle.map.Blocks[i][k][j].Name);
                         blocks.Add(br);
                     }
                 }

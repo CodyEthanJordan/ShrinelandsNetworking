@@ -39,7 +39,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public static Map GetDebugMap()
         {
-            var debugMap = new Map(10, 10, 6);
+            var debugMap = new Map(15, 10, 6);
 
             for (int i = 0; i < debugMap.Shape[0]; i++)
             {
