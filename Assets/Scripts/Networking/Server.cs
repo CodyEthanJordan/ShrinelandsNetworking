@@ -43,6 +43,11 @@ namespace Assets.Scripts.Networking
             NetworkEventType recNetworkEvent = NetworkTransport.Receive(out recHostId,
                 out recConnectionId, out recChannelId, recBuffer, bufferSize, out dataSize, out error);
 
+            if ((NetworkError)error != NetworkError.Ok)
+            {
+                Debug.LogError("Networking error : " + (NetworkError)error);
+            }
+
             switch (recNetworkEvent)
             {
                 case NetworkEventType.Nothing:
@@ -53,12 +58,9 @@ namespace Assets.Scripts.Networking
                 case NetworkEventType.DataEvent:
                     string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();
                     Debug.Log("incoming message event received: " + message);
-                    if(message.Equals("heartbeat"))
+                    if(message == "send battle")
                     {
-                        Debug.Log("Hey " + recHostId + " is still alive");
-                    }
-                    else if(message == "send battle")
-                    {
+                        Debug.Log("Serializing battle for client " + recHostId);
                         SendBattleInfo(recHostId, recConnectionId);
                     }
                     break;
