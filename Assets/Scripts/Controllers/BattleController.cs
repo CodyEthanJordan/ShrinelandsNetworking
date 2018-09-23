@@ -33,7 +33,7 @@ namespace Assets.Scripts.Controllers
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
         private List<UnitRenderer> units = new List<UnitRenderer>();
         private List<GameObject> targetCubes = new List<GameObject>();
-        private Animator FSM;
+        public Animator FSM;
 
         public event TargetClickedEvent OnTargetClick;
 
@@ -183,7 +183,7 @@ namespace Assets.Scripts.Controllers
                 var side = battle.sides.FirstOrDefault(s => s.ID == unit.SideID);
                 Color color;
                 ColorUtility.TryParseHtmlString(side.Color, out color);
-                ur.Become(unit.ID, color);
+                ur.Become(unit, color);
 
                 units.Add(ur);
             }

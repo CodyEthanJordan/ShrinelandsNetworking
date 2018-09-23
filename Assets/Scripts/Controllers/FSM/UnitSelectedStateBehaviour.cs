@@ -12,15 +12,16 @@ namespace Assets.Scripts.Controllers.FSM
         {
             base.OnStateEnter(animator, stateInfo, layerIndex);
 
-            bc.ShowUnitStats(bc.SelectedUnit.UnitRepresented);
-            bc.RenderMovementOptions(bc.SelectedUnit.UnitRepresented);
+            bc.ShowUnitStats(bc.SelectedUnit.UnitRepresented.ID);
+            bc.RenderMovementOptions(bc.SelectedUnit.UnitRepresented.ID);
             bc.OnTargetClick += MoveUnit;
         }
 
         private void MoveUnit(object source, Vector3 position)
         {
-            Vector3Int target = new Vector3Int((int)position.x, (int)position.y, (int)position.z);
-            bc.client.MoveUnit(bc.SelectedUnit.UnitRepresented, target);
+            Vector3Int target = new Vector3Int((int)position.x, (int)position.z, (int)position.y);
+            bc.client.MoveUnit(bc.SelectedUnit.UnitRepresented.ID, target);
+            bc.FSM.SetTrigger("Deselect");
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
