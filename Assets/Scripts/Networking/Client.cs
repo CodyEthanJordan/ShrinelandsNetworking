@@ -14,7 +14,8 @@ namespace Assets.Scripts.Networking
         private int connectionID;
 
         private float heartbeatTimer;
-        private float heartbeatRate = 0.5f;
+        private float heartbeatRate = 1f;
+        private bool connected = false;
 
         private void Start()
         {
@@ -25,11 +26,16 @@ namespace Assets.Scripts.Networking
             hostID = NetworkTransport.AddHost(topology, serverSocketPort + 1);
         }
 
-        public void Connect()
+        public void ConnectToServer()
         {
             byte error;
-            connectionID = NetworkTransport.Connect(hostID, "127.0.0.1", serverSocketPort, 0, out error);
-            Debug.Log("Connected to server. ConnectionId: " + connectionID);
+            string serverIP = "192.168.1.3";
+            connectionID = NetworkTransport.Connect(hostID, "192.168.1.3", serverSocketPort, 0, out error);
+            if ((NetworkError)error != NetworkError.Ok)
+            {
+                Debug.LogError("Networking error : " + (NetworkError)error);
+            }
+            Debug.Log("Requesting connection from server " + serverIP + ". ConnectionId: " + connectionID);
         }
 
         public void SendTestMessage()
@@ -68,6 +74,11 @@ namespace Assets.Scripts.Networking
 
         private void Update()
         {
+            if(connected)
+            {
+                Heartbeat();
+            }
+
             int recHostId;
             int recConnectionId;
             int recChannelId;
@@ -84,6 +95,7 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received");
+                    connected = true;
                     break;
                 case NetworkEventType.DataEvent:
                     Stream stream = new MemoryStream(recBuffer);
@@ -93,12 +105,14 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
+                    connected = false;
                     break;
             }
         }
 
         private void Heartbeat()
         {
+            Debug.Log("Sending heartbeat");
             heartbeatTimer += Time.deltaTime;
             if(heartbeatTimer > heartbeatRate)
             {
