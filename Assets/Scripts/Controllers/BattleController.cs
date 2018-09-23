@@ -21,12 +21,21 @@ namespace Assets.Scripts.Controllers
         public Transform UnitParent;
         public Transform BlockParent;
 
+        public UnitRenderer SelectedUnit;
+
         [SerializeField] private Text serverIPText;
         [SerializeField] private GameObject connectionPanel;
         [SerializeField] private Client client;
 
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
         private List<UnitRenderer> units = new List<UnitRenderer>();
+        private Animator FSM;
+
+
+        private void Awake()
+        {
+            FSM = GetComponent<Animator>();
+        }
 
         private void Start()
         {
@@ -39,6 +48,33 @@ namespace Assets.Scripts.Controllers
         private void Update()
         {
             HandleCameraMovement();
+            HandleClickingStuff();
+        }
+
+        private void HandleClickingStuff()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                FSM.SetTrigger("Deselect");
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, 100.0f))
+                {
+                    if (hit.transform.gameObject.CompareTag("Unit"))
+                    {
+                        SelectedUnit = hit.transform.gameObject.GetComponent<UnitRenderer>();
+                        FSM.SetTrigger("UnitClicked");
+                    }
+                    else
+                    {
+                        FSM.SetTrigger("Deselect"); //TODO: let FSM handle this stuff
+                    }
+                }
+            }
         }
 
         private void HandleCameraMovement()
@@ -97,7 +133,7 @@ namespace Assets.Scripts.Controllers
             foreach (var unit in battle.units)
             {
                 var newUnit = Instantiate(UnitPrefab, UnitParent, true);
-                newUnit.transform.position = unit.Position;
+                newUnit.transform.position = new Vector3(unit.Position.x, unit.Position.z, unit.Position.y);
                 var ur = newUnit.GetComponent<UnitRenderer>();
                 var side = battle.sides.FirstOrDefault(s => s.ID == unit.SideID);
                 Color color;
@@ -106,6 +142,8 @@ namespace Assets.Scripts.Controllers
 
                 units.Add(ur);
             }
+
+            FSM.SetTrigger("GotBattle");
         }
 
         private void Connected(object source)

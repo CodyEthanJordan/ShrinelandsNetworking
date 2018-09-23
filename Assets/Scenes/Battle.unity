@@ -772,6 +772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1072180271}
   - component: {fileID: 1072180272}
+  - component: {fileID: 1072180270}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -779,6 +780,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &1072180270
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1072180269}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f6d03d18649e0674f935baea08174a0f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &1072180271
 Transform:
   m_ObjectHideFlags: 0
@@ -813,6 +832,7 @@ MonoBehaviour:
   mouseLook: {fileID: 86883143}
   UnitParent: {fileID: 868706137}
   BlockParent: {fileID: 1149742260}
+  SelectedUnit: {fileID: 0}
   serverIPText: {fileID: 865051711}
   connectionPanel: {fileID: 1290846462}
   client: {fileID: 574842053}
