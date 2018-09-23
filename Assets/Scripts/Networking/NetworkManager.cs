@@ -13,6 +13,7 @@ namespace Assets.Scripts.Networking
     {
         public Battle battle;
 
+        protected int serverSocketPort = 8888;
         protected int reliableChannelID;
         protected int hostID;
 

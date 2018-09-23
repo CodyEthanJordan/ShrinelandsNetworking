@@ -12,7 +12,6 @@ namespace Assets.Scripts.Networking
     public class Client : NetworkManager
     {
         private int connectionID;
-        private int serverSocketPort = 8888;
 
         private float heartbeatTimer;
         private float heartbeatRate = 0.5f;

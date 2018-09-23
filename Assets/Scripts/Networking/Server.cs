@@ -16,7 +16,6 @@ namespace Assets.Scripts.Networking
     {
         public readonly int maxConnections = 5;
 
-        private int socketPort = 8888;
         private int connectionID;
 
         private void Start()
@@ -25,19 +24,12 @@ namespace Assets.Scripts.Networking
             ConnectionConfig config = new ConnectionConfig();
             reliableChannelID = config.AddChannel(QosType.Reliable);
             HostTopology topology = new HostTopology(config, maxConnections);
-            hostID = NetworkTransport.AddHost(topology, socketPort);
+            hostID = NetworkTransport.AddHost(topology, serverSocketPort);
             Debug.Log("Socket Open. hostID is: " + hostID);
 
             //create debug battle
             battle = Battle.GetDebugBattle();
        }
-
-        public void Connect()
-        {
-            byte error;
-            connectionID = NetworkTransport.Connect(hostID, "127.0.0.1", socketPort, 0, out error);
-            Debug.Log("Connected to server. ConnectionId: " + connectionID);
-        }
 
         void Update()
         {
@@ -56,8 +48,7 @@ namespace Assets.Scripts.Networking
                 case NetworkEventType.Nothing:
                     break;
                 case NetworkEventType.ConnectEvent:
-                    Debug.Log("incoming connection event received");
-                    SendInfo(recHostId, recConnectionId);
+                    Debug.Log("incoming connection event received from " + recHostId);
                     break;
                 case NetworkEventType.DataEvent:
                     Stream stream = new MemoryStream(recBuffer);
@@ -68,6 +59,10 @@ namespace Assets.Scripts.Networking
                     {
                         Debug.Log("Hey " + recHostId + " is still alive");
                     }
+                    else if(message == "send battle")
+                    {
+                        SendBattleInfo(recHostId, recConnectionId);
+                    }
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
@@ -75,12 +70,14 @@ namespace Assets.Scripts.Networking
             }
         }
 
-        void SendInfo(int hostID, int connectionID)
+        void SendBattleInfo(int hostID, int connectionID)
         {
             byte error;
             string json = JsonConvert.SerializeObject(battle, Formatting.None);
             var bytes = Zip(json);
-
+            Debug.Log("Sending battle info to " + hostID);
+            Debug.Log(bytes);
+            Debug.Log(bytes.Length);
             NetworkTransport.Send(hostID, connectionID, reliableChannelID, bytes, bytes.Length, out error);
         }
 
