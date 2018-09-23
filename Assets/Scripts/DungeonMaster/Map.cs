@@ -70,5 +70,11 @@ namespace Assets.Scripts.DungeonMaster
         {
             Vector3Int.up, Vector3Int.right, Vector3Int.down, Vector3Int.left
         };
+
+        public int Distance(Vector3Int position, Vector3Int target)
+        {
+            var difference = target - position;
+            return Math.Abs(difference.x) + Math.Abs(difference.y) + Math.Abs(difference.z)
+        }
     }
 }

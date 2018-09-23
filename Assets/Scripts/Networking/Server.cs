@@ -18,6 +18,8 @@ namespace Assets.Scripts.Networking
 
         private int connectionID;
 
+        private List<ClientInfo> connectedClients = new List<ClientInfo>();
+
         private void Start()
         {
             NetworkTransport.Init();
@@ -54,6 +56,7 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received from " + recHostId);
+                    connectedClients.Add(new ClientInfo("DefaultName", recConnectionId, recHostId));
                     break;
                 case NetworkEventType.DataEvent:
                     string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();
@@ -63,20 +66,62 @@ namespace Assets.Scripts.Networking
                         Debug.Log("Serializing battle for client " + recHostId);
                         SendBattleInfo(recHostId, recConnectionId);
                     }
+                    else if(message.StartsWith("request"))
+                    {
+                        HandleRequest(message.Substring("request".Length + 1));
+                    }
                     break;
                 case NetworkEventType.DisconnectEvent:
+                    var clientLost = connectedClients.First(c => c.HostID == recHostId && c.ConnectionID == recConnectionId);
+                    connectedClients.Remove(clientLost);
                     Debug.Log("remote client event disconnected");
                     break;
             }
         }
 
-        void SendBattleInfo(int hostID, int connectionID)
+        private void HandleRequest(string requestJson)
+        {
+            var request = JsonConvert.DeserializeObject<Request>(requestJson);
+            Result result = null;
+            switch(request.Type)
+            {
+                case "Move":
+                    result = battle.MoveUnit(request.Unit, request.Target);
+                    break;
+            }
+
+            if(result != null)
+            {
+                TellClientsAboutResult(result);
+            }
+        }
+
+        private void TellClientsAboutResult(Result result)
+        {
+            string resultJson = JsonConvert.SerializeObject(result);
+            byte[] message = Encoding.UTF8.GetBytes("result " + resultJson);
+
+            foreach (var client in connectedClients)
+            {
+                SendMessageToClient(client.HostID, client.ConnectionID, message);
+            }
+        }
+
+        private void SendMessageToClient(int hostID, int connectionID, byte[] message)
         {
             byte error;
+            NetworkTransport.Send(hostID, connectionID, reliableChannelID, message, message.Length, out error);
+            if((NetworkError)error != NetworkError.Ok)
+            {
+                Debug.LogError("Network error when sending: " + (NetworkError)error);
+            }
+        }
+
+        private void SendBattleInfo(int hostID, int connectionID)
+        {
             string json = JsonConvert.SerializeObject(battle, Formatting.None);
             var bytes = Zip(json);
-            Debug.Log("Sending battle info to " + hostID);
-            NetworkTransport.Send(hostID, connectionID, reliableChannelID, bytes, bytes.Length, out error);
+            SendMessageToClient(hostID, connectionID, bytes);
         }
 
         

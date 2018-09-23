@@ -33,7 +33,8 @@ namespace Assets.Scripts.Networking
 
         internal void MoveUnit(Guid unitRepresented, Vector3Int position)
         {
-            throw new NotImplementedException();
+            var moveRequest = Request.ToMove(unitRepresented, position);
+            SendToServer("request " + JsonConvert.SerializeObject(moveRequest));
         }
 
         public void ConnectToServer(string address)
@@ -102,7 +103,17 @@ namespace Assets.Scripts.Networking
                     }
                     break;
                 case NetworkEventType.DataEvent:
-                    HandleData(recBuffer, dataSize);
+                    string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();
+                    if(message.StartsWith("result"))
+                    {
+                        Result result = JsonConvert.DeserializeObject<Result>(message.Substring("result".Length + 1));
+                        battle.HandleResult(result);
+                    }
+                    else
+                    {
+                        //assume its a serialized Battle for now
+                        HandleData(recBuffer, dataSize);
+                    }
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
