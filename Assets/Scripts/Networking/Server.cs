@@ -51,11 +51,9 @@ namespace Assets.Scripts.Networking
                     Debug.Log("incoming connection event received from " + recHostId);
                     break;
                 case NetworkEventType.DataEvent:
-                    Stream stream = new MemoryStream(recBuffer);
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    string message = formatter.Deserialize(stream) as string;
+                    string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();
                     Debug.Log("incoming message event received: " + message);
-                    if(message == "heartbeat")
+                    if(message.Equals("heartbeat"))
                     {
                         Debug.Log("Hey " + recHostId + " is still alive");
                     }
