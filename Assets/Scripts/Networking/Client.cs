@@ -67,7 +67,7 @@ namespace Assets.Scripts.Networking
 
         private void RequestBattle()
         {
-            SendToServer("request battle");
+            SendToServer("send battle");
         }
 
         private void Update()
@@ -87,25 +87,34 @@ namespace Assets.Scripts.Networking
             NetworkEventType recNetworkEvent = NetworkTransport.Receive(out recHostId,
                 out recConnectionId, out recChannelId, recBuffer, bufferSize, out dataSize, out error);
 
+            if ((NetworkError)error != NetworkError.Ok)
+            {
+                Debug.LogError("Networking error : " + (NetworkError)error);
+            }
+
             switch (recNetworkEvent)
             {
                 case NetworkEventType.Nothing:
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received");
+                    RequestBattle();
                     connected = true;
                     break;
                 case NetworkEventType.DataEvent:
-                    Stream stream = new MemoryStream(recBuffer);
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    string message = formatter.Deserialize(stream) as string;
-                    Debug.Log("incoming message event received:  " + message);
+                    HandleData(recBuffer, dataSize);
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
                     connected = false;
                     break;
             }
+        }
+
+        private void HandleData(byte[] buffer, int dataSize)
+        {
+            string bat = Unzip(buffer);
+            Debug.Log(bat);
         }
 
         private void Heartbeat()
