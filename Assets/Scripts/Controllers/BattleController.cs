@@ -13,16 +13,20 @@ namespace Assets.Scripts.Controllers
     public class BattleController : MonoBehaviour
     {
         public GameObject BlockPrefab;
+        public GameObject UnitPrefab;
         public Camera Cam;
         public float Speed;
         public SmoothMouseLook mouseLook;
 
+        public Transform UnitParent;
+        public Transform BlockParent;
 
         [SerializeField] private Text serverIPText;
         [SerializeField] private GameObject connectionPanel;
         [SerializeField] private Client client;
 
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
+        private List<UnitRenderer> units = new List<UnitRenderer>();
 
         private void Start()
         {
@@ -63,6 +67,12 @@ namespace Assets.Scripts.Controllers
                 Destroy(block.gameObject);
             }
             blocks.Clear();
+
+            foreach (var unit in units)
+            {
+                Destroy(unit.gameObject);
+            }
+            units.Clear();
         }
 
         private void InitializeBattle(object source, Battle battle)
@@ -75,13 +85,26 @@ namespace Assets.Scripts.Controllers
                 {
                     for (int k = 0; k < battle.map.Shape[2]; k++)
                     {
-                        var newBlock = Instantiate(BlockPrefab, this.transform, true);
+                        var newBlock = Instantiate(BlockPrefab, BlockParent, true);
                         newBlock.transform.position = new Vector3(i, k, j);
                         var br = newBlock.GetComponent<BlockRenderer>();
                         br.Become(battle.map.Blocks[i][j][k].Name);
                         blocks.Add(br);
                     }
                 }
+            }
+
+            foreach (var unit in battle.units)
+            {
+                var newUnit = Instantiate(UnitPrefab, UnitParent, true);
+                newUnit.transform.position = unit.Position;
+                var ur = newUnit.GetComponent<UnitRenderer>();
+                var side = battle.sides.FirstOrDefault(s => s.ID == unit.SideID);
+                Color color;
+                ColorUtility.TryParseHtmlString(side.Color, out color);
+                ur.Become(unit.ID, color);
+
+                units.Add(ur);
             }
         }
 

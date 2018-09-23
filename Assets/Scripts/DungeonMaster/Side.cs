@@ -9,11 +9,13 @@ namespace Assets.Scripts.DungeonMaster
     {
         public Guid ID { get; protected set; }
         public string Name { get; protected set; }
+        public string Color { get; protected set; }
 
-        public Side(string name)
+        public Side(string name, string color)
         {
             ID = Guid.NewGuid();
             this.Name = name;
+            this.Color = color;
         }
     }
 }
