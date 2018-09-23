@@ -14,7 +14,7 @@ namespace Assets.Scripts.Networking
         private int connectionID;
 
         private float heartbeatTimer;
-        private float heartbeatRate = 1f;
+        private float heartbeatRate = 3f;
         private bool connected = false;
 
         private void Start()
@@ -54,12 +54,10 @@ namespace Assets.Scripts.Networking
         private void SendToServer(string message)
         {
             byte error;
-            byte[] buffer = new byte[message.Length];
-            Stream stream = new MemoryStream(buffer);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, message);
+            var buffer = Encoding.UTF8.GetBytes(message);
+            var bufferLength = Encoding.UTF8.GetByteCount(message);
 
-            NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, message.Length, out error);
+            NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, bufferLength, out error);
 
             if ((NetworkError)error != NetworkError.Ok)
             {
@@ -112,7 +110,6 @@ namespace Assets.Scripts.Networking
 
         private void Heartbeat()
         {
-            Debug.Log("Sending heartbeat");
             heartbeatTimer += Time.deltaTime;
             if(heartbeatTimer > heartbeatRate)
             {
