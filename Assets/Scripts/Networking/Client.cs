@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Assets.Scripts.DungeonMaster;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +13,9 @@ namespace Assets.Scripts.Networking
 {
     public class Client : NetworkManager
     {
+        public event ConnectionEvent OnConnected;
+        public event BattleRecieved OnRecieveBattle;
+
         private int connectionID;
 
         private float heartbeatTimer;
@@ -26,29 +31,15 @@ namespace Assets.Scripts.Networking
             hostID = NetworkTransport.AddHost(topology, serverSocketPort + 1);
         }
 
-        public void ConnectToServer()
+        public void ConnectToServer(string address)
         {
             byte error;
-            string serverIP = "192.168.1.3";
-            connectionID = NetworkTransport.Connect(hostID, "192.168.1.3", serverSocketPort, 0, out error);
+            connectionID = NetworkTransport.Connect(hostID, address, serverSocketPort, 0, out error);
             if ((NetworkError)error != NetworkError.Ok)
             {
                 Debug.LogError("Networking error : " + (NetworkError)error);
             }
-            Debug.Log("Requesting connection from server " + serverIP + ". ConnectionId: " + connectionID);
-        }
-
-        public void SendTestMessage()
-        {
-            byte error;
-            byte[] buffer = new byte[1024];
-            Stream stream = new MemoryStream(buffer);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, "HelloServer");
-
-            int bufferSize = 1024;
-
-            NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, bufferSize, out error);
+            Debug.Log("Requesting connection from server " + address + ". ConnectionId: " + connectionID);
         }
 
         private void SendToServer(string message)
@@ -100,6 +91,10 @@ namespace Assets.Scripts.Networking
                     Debug.Log("incoming connection event received");
                     RequestBattle();
                     connected = true;
+                    if(OnConnected != null)
+                    {
+                        OnConnected(this);
+                    }
                     break;
                 case NetworkEventType.DataEvent:
                     HandleData(recBuffer, dataSize);
@@ -113,8 +108,19 @@ namespace Assets.Scripts.Networking
 
         private void HandleData(byte[] buffer, int dataSize)
         {
-            string bat = Unzip(buffer);
-            Debug.Log(bat);
+            RecievedBattle(buffer, dataSize);
+        }
+
+        private void RecievedBattle(byte[] buffer, int dataSize)
+        {
+            string battleJson = Unzip(buffer);
+
+            this.battle = JsonConvert.DeserializeObject<Battle>(battleJson);
+
+            if(OnRecieveBattle != null)
+            {
+                OnRecieveBattle(this, this.battle);
+            }
         }
 
         private void Heartbeat()

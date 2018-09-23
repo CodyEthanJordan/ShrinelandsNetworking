@@ -61,4 +61,7 @@ namespace Assets.Scripts.Networking
             }
         }
     }
+
+    public delegate void ConnectionEvent(object source);
+    public delegate void BattleRecieved(object source, Battle battle);
 }
