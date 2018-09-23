@@ -16,6 +16,7 @@ namespace Assets.Scripts.DungeonMaster
         public Map map;
         public List<Side> sides = new List<Side>();
         public List<Unit> units = new List<Unit>();
+        public Side currentSide;
 
         public Battle()
         {
@@ -76,6 +77,8 @@ namespace Assets.Scripts.DungeonMaster
                 new Vector3Int(5, 5, 3)));
             defaultBattle.units.Add(Unit.GetDefaultDude("Zach", defaultBattle.sides[1].ID,
                 new Vector3Int(5, 6, 3)));
+
+            defaultBattle.currentSide = defaultBattle.sides[0];
 
             return defaultBattle;
         }

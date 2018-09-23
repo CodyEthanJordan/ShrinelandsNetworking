@@ -37,6 +37,8 @@ namespace Assets.Scripts.Controllers
 
         public event TargetClickedEvent OnTargetClick;
 
+        public Side playingAsSide;
+
         private void Awake()
         {
             FSM = GetComponent<Animator>();
@@ -88,6 +90,11 @@ namespace Assets.Scripts.Controllers
                     }
                 }
             }
+        }
+
+        public void EndTurn()
+        {
+            client.SendToServer("end turn" + playingAsSide.ID);
         }
 
         public void ShowUnitStats(Guid unitRepresented)

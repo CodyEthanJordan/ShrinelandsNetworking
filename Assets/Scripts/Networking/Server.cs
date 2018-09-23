@@ -56,7 +56,15 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received from " + recHostId);
-                    connectedClients.Add(new ClientInfo("DefaultName", recConnectionId, recHostId));
+                    if(connectedClients.Count > 0)
+                    {
+                        Debug.LogError("Yo who else is playing rn");
+                    }
+                    else
+                    {
+                        var allSides = battle.sides.Select(s => s.ID).ToList(); //set client to control all sides
+                        connectedClients.Add(new ClientInfo("DefaultName", recConnectionId, recHostId, allSides));
+                    }
                     break;
                 case NetworkEventType.DataEvent:
                     string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();

@@ -10,12 +10,14 @@ namespace Assets.Scripts.Networking
         public string Name;
         public int ConnectionID;
         public int HostID;
+        public List<Guid> ControlledSides;
 
-        public ClientInfo(string name, int connectionID, int hostID)
+        public ClientInfo(string name, int connectionID, int hostID, List<Guid> controlledSides)
         {
             this.Name = name;
             this.ConnectionID = connectionID;
             this.HostID = hostID;
+            this.ControlledSides = new List<Guid>(controlledSides);
         }
     }
 }

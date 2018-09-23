@@ -48,7 +48,7 @@ namespace Assets.Scripts.Networking
             Debug.Log("Requesting connection from server " + address + ". ConnectionId: " + connectionID);
         }
 
-        private void SendToServer(string message)
+        public void SendToServer(string message)
         {
             byte error;
             var buffer = Encoding.UTF8.GetBytes(message);
