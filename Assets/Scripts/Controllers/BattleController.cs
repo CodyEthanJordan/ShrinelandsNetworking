@@ -15,6 +15,7 @@ namespace Assets.Scripts.Controllers
         public GameObject BlockPrefab;
         public GameObject UnitPrefab;
         public Camera Cam;
+
         public float Speed;
         public SmoothMouseLook mouseLook;
 
@@ -22,6 +23,7 @@ namespace Assets.Scripts.Controllers
         public Transform BlockParent;
 
         public UnitRenderer SelectedUnit;
+        public UnitInfoPanel unitInfoPanel;
 
         [SerializeField] private Text serverIPText;
         [SerializeField] private GameObject connectionPanel;
@@ -30,7 +32,6 @@ namespace Assets.Scripts.Controllers
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
         private List<UnitRenderer> units = new List<UnitRenderer>();
         private Animator FSM;
-
 
         private void Awake()
         {
@@ -75,6 +76,17 @@ namespace Assets.Scripts.Controllers
                     }
                 }
             }
+        }
+
+        public void ShowUnitStats(Guid unitRepresented)
+        {
+            unitInfoPanel.gameObject.SetActive(true);
+            unitInfoPanel.ShowUnit(client.battle.units.First(u => u.ID == unitRepresented));
+        }
+
+        public void HideUnitStats()
+        {
+            unitInfoPanel.gameObject.SetActive(false);
         }
 
         private void HandleCameraMovement()

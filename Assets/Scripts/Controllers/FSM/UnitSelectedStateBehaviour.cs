@@ -11,11 +11,13 @@ namespace Assets.Scripts.Controllers.FSM
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             base.OnStateEnter(animator, stateInfo, layerIndex);
-            Debug.Log("Clicked on " + bc.SelectedUnit.UnitRepresented);
+
+            bc.ShowUnitStats(bc.SelectedUnit.UnitRepresented);
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo animatorStateInfo, int layerIndex)
         {
+            bc.HideUnitStats();
         }
       
     }
