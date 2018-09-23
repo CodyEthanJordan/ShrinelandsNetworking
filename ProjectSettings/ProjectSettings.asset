@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Deal With The Dev
   productName: ShrinelandsNetworking
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -613,7 +613,8 @@ PlayerSettings:
     daydream:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
   cloudProjectId: 97ed1b1a-04e3-4fcf-b1d6-ba36dbaa69e1
