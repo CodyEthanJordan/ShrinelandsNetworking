@@ -13,8 +13,8 @@ namespace Assets.Scripts.DungeonMaster
         public Guid SideID { get; protected set; }
         public string Name { get; protected set; }
 
-        public int HP;
-        public int Movement;
+        public Stat HP;
+        public Stat Movement;
         public Vector3Int Position = new Vector3Int();
 
         public Unit(string name, Guid sideID, Vector3Int pos)
