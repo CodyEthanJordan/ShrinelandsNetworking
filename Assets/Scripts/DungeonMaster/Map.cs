@@ -74,7 +74,7 @@ namespace Assets.Scripts.DungeonMaster
         public int Distance(Vector3Int position, Vector3Int target)
         {
             var difference = target - position;
-            return Math.Abs(difference.x) + Math.Abs(difference.y) + Math.Abs(difference.z)
+            return Math.Abs(difference.x) + Math.Abs(difference.y) + Math.Abs(difference.z);
         }
     }
 }
