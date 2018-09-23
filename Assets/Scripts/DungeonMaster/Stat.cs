@@ -10,10 +10,15 @@ namespace Assets.Scripts.DungeonMaster
         public int Current;
         public int Max;
 
-        Stat(int current, int max)
+        public Stat(int current, int max)
         {
             this.Current = current;
             this.Max = max;
+        }
+
+        public override string ToString()
+        {
+            return Current + "/" + Max;
         }
     }
 }

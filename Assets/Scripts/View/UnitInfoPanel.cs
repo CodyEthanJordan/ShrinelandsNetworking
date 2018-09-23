@@ -17,7 +17,8 @@ namespace Assets.Scripts.View
         public void ShowUnit(Unit unit)
         {
             unitName.text = unit.Name;
-            hp.text = 
+            hp.text = "HP: " + unit.HP;
+            move.text = "Move: " + unit.Movement;
         }
     }
 }
