@@ -32,7 +32,7 @@ namespace Assets.Scripts.Controllers
 
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
         private List<UnitRenderer> units = new List<UnitRenderer>();
-        private List<GameObject> targetCubes = new List<GameObject>();
+        private List<TargetInfo> targetCubes = new List<TargetInfo>();
         public Animator FSM;
 
         public event TargetClickedEvent OnTargetClick;
@@ -111,11 +111,13 @@ namespace Assets.Scripts.Controllers
         public void RenderMovementOptions(Guid unitRepresented)
         {
             RemoveTargets();
-            foreach (var pos in client.battle.GetValidMovements(unitRepresented))
+            foreach (var kvp in client.battle.GetValidMovements(unitRepresented))
             {
                 var newCube = Instantiate(TargetCubePrefab, this.transform, true);
-                newCube.transform.position = new Vector3(pos.x, pos.z, pos.y);
-                targetCubes.Add(newCube);
+                newCube.transform.position = new Vector3(kvp.Value.x, kvp.Value.z, kvp.Value.y);
+                var targetInfo = newCube.GetComponent<TargetInfo>();
+                targetInfo.Direction = kvp.Key;
+                targetCubes.Add(targetInfo);
             }
         }
 
@@ -132,9 +134,13 @@ namespace Assets.Scripts.Controllers
                 Cursor.visible = true;
             }
 
-            Cam.transform.Translate(Vector3.forward * Input.GetAxis("Vertical") * Speed * Time.deltaTime, Space.Self);
-            Cam.transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * Speed * Time.deltaTime, Space.Self);
-            Cam.transform.Translate(Vector3.up * Input.GetAxis("Jump") * Speed * Time.deltaTime, Space.World);
+            if(Input.GetMouseButton(1))
+            {
+                Cam.transform.Translate(Vector3.forward * Input.GetAxis("Vertical") * Speed * Time.deltaTime, Space.Self);
+                Cam.transform.Translate(Vector3.right * Input.GetAxis("Horizontal") * Speed * Time.deltaTime, Space.Self);
+                Cam.transform.Translate(Vector3.up * Input.GetAxis("Jump") * Speed * Time.deltaTime, Space.World);
+            }
+           
 
         }
 
@@ -142,7 +148,7 @@ namespace Assets.Scripts.Controllers
         {
             foreach (var cube in targetCubes)
             {
-                Destroy(cube);
+                Destroy(cube.gameObject);
             }
             targetCubes.Clear();
         }

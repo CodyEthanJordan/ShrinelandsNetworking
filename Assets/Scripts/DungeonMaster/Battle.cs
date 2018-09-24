@@ -42,9 +42,9 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
-        public List<Vector3Int> GetValidMovements(Guid unitID)
+        public Dictionary<Vector3Int, Vector3Int> GetValidMovements(Guid unitID)
         {
-            List<Vector3Int> allowedDestinations = new List<Vector3Int>();
+            Dictionary<Vector3Int, Vector3Int> allowedDestinations = new Dictionary<Vector3Int, Vector3Int>();
             var unit = units.First(u => u.ID == unitID);
 
             foreach (var dir in Map.CardinalDirections)
@@ -52,7 +52,7 @@ namespace Assets.Scripts.DungeonMaster
                 var dest = unit.Position + dir;
                 if (IsPassable(dest))
                 {
-                    allowedDestinations.Add(dest);
+                    allowedDestinations.Add(dir, dest);
                 }
             }
 
