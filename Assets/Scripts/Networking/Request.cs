@@ -11,7 +11,7 @@ namespace Assets.Scripts.Networking
         public string Type;
         public Guid Unit;
         public Vector3Int Target;
-        public Guid Side;
+        public Guid SideID;
 
         public Request(string type, Guid unit, Vector3Int target)
         {
@@ -30,10 +30,18 @@ namespace Assets.Scripts.Networking
             return new Request("Move", unit, destination);
         }
 
-        public static Request ToEndTurn(Guid side)
+        public static Request ToEndTurn(Guid sideID)
         {
             var request = new Request();
-            request.Side = side;
+            request.SideID = sideID;
+            request.Type = "End Turn";
+            return request;
+        }
+
+        public static Request ToJoin()
+        {
+            var request = new Request();
+            request.Type = "Join Game";
             return request;
         }
     }

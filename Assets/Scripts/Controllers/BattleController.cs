@@ -256,4 +256,6 @@ namespace Assets.Scripts.Controllers
 
     public delegate void TargetClickedEvent(object source, Vector3 position);
     public delegate void DirectionChosenEvent(object source, Vector3Int position);
+    public delegate void SelectedUnitMovedEvent(object source, Vector3Int position);
+    public delegate void SelectedUnitStatChangedEvent(object source, Unit unit);
 }

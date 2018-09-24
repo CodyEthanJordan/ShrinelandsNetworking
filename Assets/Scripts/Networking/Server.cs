@@ -67,17 +67,10 @@ namespace Assets.Scripts.Networking
                     }
                     break;
                 case NetworkEventType.DataEvent:
-                    string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();
-                    Debug.Log("incoming message event received: " + message);
-                    if(message == "send battle")
-                    {
-                        Debug.Log("Serializing battle for client " + recHostId);
-                        SendBattleInfo(recHostId, recConnectionId);
-                    }
-                    else if(message.StartsWith("request"))
-                    {
-                        HandleRequest(message.Substring("request".Length + 1));
-                    }
+                    var json = Unzip(recBuffer);
+                    Request clientRequest = JsonConvert.DeserializeObject<Request>(json);
+                    HandleRequest(clientRequest, recHostId, recConnectionId);
+                    
                     break;
                 case NetworkEventType.DisconnectEvent:
                     var clientLost = connectedClients.First(c => c.HostID == recHostId && c.ConnectionID == recConnectionId);
@@ -87,26 +80,28 @@ namespace Assets.Scripts.Networking
             }
         }
 
-        private void HandleRequest(string requestJson)
+        private void HandleRequest(Request request, int clientHostID, int clientConnectionID)
         {
-            var request = JsonConvert.DeserializeObject<Request>(requestJson);
-            Result result = null;
+            List<Result> results = null;
             switch(request.Type)
             {
+                case "Join Game":
+                    SendBattleInfo(clientHostID, clientConnectionID);
+                    break;
                 case "Move":
-                    result = battle.MoveUnit(request.Unit, request.Target);
+                    results = battle.MoveUnit(request.Unit, request.Target);
                     break;
             }
 
-            if(result != null)
+            if(results != null && results.Count > 0)
             {
-                TellClientsAboutResult(result);
+                TellClientsAboutResult(results);
             }
         }
 
-        private void TellClientsAboutResult(Result result)
+        private void TellClientsAboutResult(List<Result> results)
         {
-            string resultJson = JsonConvert.SerializeObject(result);
+            string resultJson = JsonConvert.SerializeObject(results);
             byte[] message = Encoding.UTF8.GetBytes("result " + resultJson);
 
             foreach (var client in connectedClients)

@@ -88,10 +88,11 @@ namespace Assets.Scripts.DungeonMaster
 
         }
 
-        public Result MoveUnit(Guid unitID, Vector3Int target)
+        public List<Result> MoveUnit(Guid unitID, Vector3Int target)
         {
             var unit = units.First(u => u.ID == unitID);
             var standingOn = map.BlockAt(unit.Position + new Vector3Int(0, 0, -1));
+            List<Result> results = new List<Result>();
 
             if (!IsPassable(target))
             {
@@ -104,7 +105,8 @@ namespace Assets.Scripts.DungeonMaster
             else
             {
                 unit.MoveTo(target, standingOn.MoveCost);
-                return new Result("Move", unit, target);
+                results.Add(new Result("Move", unit, target));
+                return results;
             }
         }
 
@@ -117,6 +119,11 @@ namespace Assets.Scripts.DungeonMaster
                     unit.HandleResult(result);
                     break;
             }
+        }
+
+        internal List<Result> EndTurn(Guid sideID)
+        {
+            throw new NotImplementedException();
         }
     }
 }
