@@ -37,7 +37,7 @@ namespace Assets.Scripts.View
             var rot = Camera.main.transform.rotation.eulerAngles.y;
             float roundedRotation = (float)Math.Round(rot / 90f) * 90f;
             int i = Map.CardinalDirections.IndexOf(localDir);
-            i = i - (int)Math.Round(roundedRotation / 90);
+            i = i + (int)Math.Round(roundedRotation / 90);
             i = (i + 4) % DirectionLabels.Count;
             return Map.CardinalDirections[i];
         }
