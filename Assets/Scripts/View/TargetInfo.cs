@@ -27,9 +27,19 @@ namespace Assets.Scripts.View
                 //we've been assigned a direction
                 int i = Map.CardinalDirections.IndexOf(Direction);
                 i = i - (int)Math.Round(roundedRotation / 90);
-                i = (i+4) % DirectionLabels.Count;
+                i = (i + 4) % DirectionLabels.Count;
                 InfoText.text = DirectionLabels[i];
             }
+        }
+
+        public static Vector3Int DirectionFromLocalDirection(Vector3Int localDir)
+        {
+            var rot = Camera.main.transform.rotation.eulerAngles.y;
+            float roundedRotation = (float)Math.Round(rot / 90f) * 90f;
+            int i = Map.CardinalDirections.IndexOf(localDir);
+            i = i - (int)Math.Round(roundedRotation / 90);
+            i = (i + 4) % DirectionLabels.Count;
+            return Map.CardinalDirections[i];
         }
     }
 }

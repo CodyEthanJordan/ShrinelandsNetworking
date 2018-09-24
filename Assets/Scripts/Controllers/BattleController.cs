@@ -36,6 +36,7 @@ namespace Assets.Scripts.Controllers
         public Animator FSM;
 
         public event TargetClickedEvent OnTargetClick;
+        public event DirectionChosenEvent OnChooseDirection;
 
         public Side playingAsSide;
 
@@ -57,6 +58,44 @@ namespace Assets.Scripts.Controllers
         {
             HandleCameraMovement();
             HandleClickingStuff();
+
+            if(!Input.GetMouseButton(1))
+            {
+                //not doing camera movement, can do keyboard shortcuts
+
+                if(Input.GetKeyUp(KeyCode.W))
+                {
+                    if(OnChooseDirection != null)
+                    {
+                        var dir = TargetInfo.DirectionFromLocalDirection(Vector3Int.up);
+                        OnChooseDirection(this, dir);
+                    }
+                }
+                else if (Input.GetKeyUp(KeyCode.D))
+                {
+                    if (OnChooseDirection != null)
+                    {
+                        var dir = TargetInfo.DirectionFromLocalDirection(Vector3Int.right);
+                        OnChooseDirection(this, dir);
+                    }
+                }
+                else if (Input.GetKeyUp(KeyCode.S))
+                {
+                    if (OnChooseDirection != null)
+                    {
+                        var dir = TargetInfo.DirectionFromLocalDirection(Vector3Int.down);
+                        OnChooseDirection(this, dir);
+                    }
+                }
+                else if (Input.GetKeyUp(KeyCode.A))
+                {
+                    if (OnChooseDirection != null)
+                    {
+                        var dir = TargetInfo.DirectionFromLocalDirection(Vector3Int.left);
+                        OnChooseDirection(this, dir);
+                    }
+                }
+            }
         }
 
         private void HandleClickingStuff()
@@ -216,4 +255,5 @@ namespace Assets.Scripts.Controllers
     }
 
     public delegate void TargetClickedEvent(object source, Vector3 position);
+    public delegate void DirectionChosenEvent(object source, Vector3Int position);
 }
