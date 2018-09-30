@@ -129,17 +129,9 @@ namespace Assets.Scripts.Networking
                     }
                     break;
                 case NetworkEventType.DataEvent:
-                    string message = Encoding.UTF8.GetString(recBuffer, 0, dataSize).Trim();
-                    if(message.StartsWith("result"))
-                    {
-                        Result result = JsonConvert.DeserializeObject<Result>(message.Substring("result".Length + 1));
-                        battle.HandleResult(result);
-                    }
-                    else
-                    {
-                        //assume its a serialized Battle for now
-                        HandleData(recBuffer, dataSize);
-                    }
+                    var json = Unzip(recBuffer);
+                    var message = JsonConvert.DeserializeObject<NetworkMessage>(json);
+                    HandleMessageFromServer(message);
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("remote client event disconnected");
@@ -148,9 +140,21 @@ namespace Assets.Scripts.Networking
             }
         }
 
-        private void HandleData(byte[] buffer, int dataSize)
+        private void HandleMessageFromServer(NetworkMessage message)
         {
-            RecievedBattle(buffer, dataSize);
+            switch(message.Type)
+            {
+                case "load map":
+                    this.battle = message.Contents as Battle;
+                    if (OnRecieveBattle != null)
+                    {
+                        OnRecieveBattle(this, this.battle);
+                    }
+
+                    var askAboutSides = new NetworkMessage("what sides", null);
+                    SendToServer(askAboutSides);
+                    break;
+            }
         }
 
         private void RecievedBattle(byte[] buffer, int dataSize)
@@ -171,7 +175,8 @@ namespace Assets.Scripts.Networking
             if(heartbeatTimer > heartbeatRate)
             {
                 heartbeatTimer = 0;
-                SendToServer("heartbeat");
+                var message = new NetworkMessage("heartbeat", null);
+                SendToServer(message);
             }
         }
     }

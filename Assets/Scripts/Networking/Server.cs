@@ -31,7 +31,7 @@ namespace Assets.Scripts.Networking
 
             //create debug battle
             battle = Battle.GetDebugBattle();
-       }
+        }
 
         void Update()
         {
@@ -56,14 +56,14 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received from " + recHostId);
-                    if(connectedClients.Count > 0)
+                    if (connectedClients.Count > 0)
                     {
                         Debug.LogError("Yo who else is playing rn");
                     }
                     else
                     {
                         var allSides = battle.sides.Select(s => s.ID).ToList(); //set client to control all sides
-                        connectedClients.Add(new ClientInfo("DefaultName", recConnectionId, recHostId, null));
+                        connectedClients.Add(new ClientInfo(recConnectionId, recHostId));
                     }
                     break;
                 case NetworkEventType.DataEvent:
@@ -80,22 +80,21 @@ namespace Assets.Scripts.Networking
             }
         }
 
-        Dictionary<Guid, Guid?> WhosPlayingWhatSide()
+        Dictionary<Side, PlayerInfo> WhosPlayingWhatSide()
         {
-            Dictionary<Guid, Guid?> whosWho = new Dictionary<Guid, Guid?>();
+            var whosWho = new Dictionary<Side, PlayerInfo>();
 
             foreach (var side in battle.sides)
             {
-                var playedBy = connectedClients.FirstOrDefault(c => c.ControlledSides.Any(s => s == side.ID));
-                if(playedBy == null)
+                var playedBy = connectedClients.FirstOrDefault(c => c.Player.PlayingAsSideIDs.Any(s => s == side.ID));
+                if (playedBy == null)
                 {
-                    whosWho.Add(side.ID, null);
+                    whosWho.Add(side, null);
                 }
                 else
                 {
-                    whosWho.Add(side.ID, playedBy.PlayerID);
+                    whosWho.Add(side, playedBy.Player);
                 }
-
             }
 
             return whosWho;
@@ -103,21 +102,22 @@ namespace Assets.Scripts.Networking
 
         private void HandleClientMessage(NetworkMessage message, int recConnectionId, int recHostId)
         {
-            switch(message.Type)
+            switch (message.Type)
             {
                 case "join game":
                     PlayerInfo info = message.Contents as PlayerInfo;
-                    connectedClients.First(c => c.ConnectionID == recConnectionId).Name = info.Name;
-                    connectedClients.First(c => c.ConnectionID == recConnectionId).PlayerID = info.ID;
+                    connectedClients.First(c => c.ConnectionID == recConnectionId).Player = info;
                     SendBattleInfo(recHostId, recConnectionId);
                     break;
+                case "what sides":
+
             }
         }
 
         private void HandleRequest(Request request, int clientHostID, int clientConnectionID)
         {
             List<Result> results = null;
-            switch(request.Type)
+            switch (request.Type)
             {
                 case "Join Game":
                     SendBattleInfo(clientHostID, clientConnectionID);
@@ -127,7 +127,7 @@ namespace Assets.Scripts.Networking
                     break;
             }
 
-            if(results != null && results.Count > 0)
+            if (results != null && results.Count > 0)
             {
                 TellClientsAboutResult(results);
             }
@@ -135,8 +135,9 @@ namespace Assets.Scripts.Networking
 
         private void TellClientsAboutResult(List<Result> results)
         {
-            string resultJson = JsonConvert.SerializeObject(results);
-            byte[] message = Encoding.UTF8.GetBytes("result " + resultJson);
+
+            //TODO: make in to generic function to send to all clients
+            var message = new NetworkMessage("results", results);
 
             foreach (var client in connectedClients)
             {
@@ -151,7 +152,7 @@ namespace Assets.Scripts.Networking
             var bytes = Zip(json);
             NetworkTransport.Send(hostID, connectionID, reliableChannelID, bytes, bytes.Length, out error);
 
-            if((NetworkError)error != NetworkError.Ok)
+            if ((NetworkError)error != NetworkError.Ok)
             {
                 Debug.LogError("Network error when sending: " + (NetworkError)error);
             }
@@ -159,9 +160,10 @@ namespace Assets.Scripts.Networking
 
         private void SendBattleInfo(int hostID, int connectionID)
         {
-            SendMessageToClient(hostID, connectionID, bytes);
+            var message = new NetworkMessage("load map", battle);
+            SendMessageToClient(hostID, connectionID, message);
         }
 
-        
+
     }
 }
