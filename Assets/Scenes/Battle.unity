@@ -857,12 +857,12 @@ Prefab:
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -80.015
       objectReference: {fileID: 0}
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
@@ -882,7 +882,7 @@ Prefab:
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
@@ -892,7 +892,7 @@ Prefab:
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224030829880773874, guid: cbcb79000d5c79d40af449c4453a0deb,
         type: 2}
@@ -1675,8 +1675,9 @@ MonoBehaviour:
   SelectedUnit: {fileID: 0}
   unitInfoPanel: {fileID: 1286750254}
   serverIPText: {fileID: 865051711}
-  playerNameText: {fileID: 1814459028}
+  playerNameInput: {fileID: 1701597127}
   connectionPanel: {fileID: 1290846462}
+  chooseSidePanel: {fileID: 0}
   client: {fileID: 574842053}
   FSM: {fileID: 0}
 --- !u!1 &1100765055
@@ -1786,7 +1787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1174951987
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1804,7 +1805,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1174951988

@@ -28,7 +28,7 @@ namespace Assets.Scripts.Controllers
         public UnitInfoPanel unitInfoPanel;
 
         [SerializeField] private Text serverIPText;
-        [SerializeField] private Text playerNameText;
+        [SerializeField] private InputField playerNameInput;
         [SerializeField] private GameObject connectionPanel;
         [SerializeField] private GameObject chooseSidePanel;
         public Client client;
@@ -70,7 +70,7 @@ namespace Assets.Scripts.Controllers
         {
             if(PlayerPrefs.HasKey("PlayerName"))
             {
-                playerNameText.text = PlayerPrefs.GetString("PlayerName");
+                playerNameInput.text = PlayerPrefs.GetString("PlayerName");
             }
         }
 
@@ -272,9 +272,9 @@ namespace Assets.Scripts.Controllers
 
         public void ConnectToServer()
         {
-            PlayerPrefs.SetString("PlayerName", playerNameText.text);
+            PlayerPrefs.SetString("PlayerName", playerNameInput.text);
             PlayerPrefs.Save();
-            client.ConnectToServer(serverIPText.text, playerNameText.text);
+            client.ConnectToServer(serverIPText.text, playerNameInput.text);
         }
     }
 
