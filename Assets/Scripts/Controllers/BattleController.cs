@@ -60,10 +60,10 @@ namespace Assets.Scripts.Controllers
             LoadPlayerPrefs();
         }
 
-        private void PickSides(object source, Dictionary<Side, PlayerInfo> sides)
+        private void PickSides(object source, Dictionary<Guid, string> sides)
         {
             chooseSidePanel.SetActive(true);
-            chooseSidePanel.GetComponent<SidePicker>().ShowOptions(sides);
+            chooseSidePanel.GetComponent<SidePicker>().ShowOptions(client.battle, sides);
         }
 
         private void LoadPlayerPrefs()

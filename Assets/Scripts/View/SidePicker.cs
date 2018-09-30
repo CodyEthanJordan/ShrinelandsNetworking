@@ -16,21 +16,22 @@ namespace Assets.Scripts.View
         public GameObject sidesList;
         public GameObject SideTogglePrefab;
 
-        public void ShowOptions(Dictionary<Side, PlayerInfo> sides)
+        public void ShowOptions(Battle battle, Dictionary<Guid, string> sides)
         {
             foreach (Transform child in sidesList.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            foreach (var side in sides)
+            foreach (var kvp in sides)
             {
                 var newToggle = Instantiate(SideTogglePrefab, sidesList.transform);
                 var text = newToggle.transform.GetChild(1).GetComponent<Text>();
-                text.text = side.Key.Name;
-                if(side.Value != null)
+                var sideName = battle.sides.First(s => s.ID == kvp.Key).Name;
+                text.text = sideName;
+                if(kvp.Value != null)
                 {
-                    text.text = text.text + " : " + side.Value.Name;
+                    text.text = text.text + " : " + kvp.Value;
                 }
             }
 

@@ -113,7 +113,10 @@ namespace Assets.Scripts.Networking
                     break;
                 case "what sides":
                     var whosWho = WhosPlayingWhatSide();
-                    SendMessageToClient(recHostId, recConnectionId, new NetworkMessage("sides", JsonConvert.SerializeObject(whosWho)));
+                    var nameList = whosWho.Select(
+                        x => new KeyValuePair<Guid, string>(x.Key.ID, x.Value == null ? null : x.Value.Name))
+                        .ToDictionary(x => x.Key, x => x.Value);
+                    SendMessageToClient(recHostId, recConnectionId, new NetworkMessage("sides", JsonConvert.SerializeObject(nameList)));
                     break;
 
             }

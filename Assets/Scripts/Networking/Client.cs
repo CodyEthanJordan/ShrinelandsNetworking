@@ -156,7 +156,7 @@ namespace Assets.Scripts.Networking
                     SendToServer(askAboutSides);
                     break;
                 case "sides":
-                    var whosWho = JsonConvert.DeserializeObject<Dictionary<Side, PlayerInfo>>(message.JsonContents);
+                    var whosWho = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(message.JsonContents);
                     if(OnRecieveSides != null)
                     {
                         OnRecieveSides(this, whosWho);
