@@ -57,7 +57,7 @@ namespace Assets.Scripts.Networking
 
         internal void PlayAs(List<Guid> playAs)
         {
-            var message = new NetworkMessage("playing as",
+            var message = new NetworkMessage("play as",
                 JsonConvert.SerializeObject(playAs));
             SendToServer(message);
         }
