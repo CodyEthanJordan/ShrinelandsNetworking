@@ -86,7 +86,9 @@ namespace Assets.Scripts.Networking
 
             foreach (var side in battle.sides)
             {
-                var playedBy = connectedClients.FirstOrDefault(c => c.Player.PlayingAsSideIDs.Any(s => s == side.ID));
+                var playedBy = connectedClients.FirstOrDefault(
+                    c => c.Player.PlayingAsSideIDs != null && 
+                    c.Player.PlayingAsSideIDs.Any(s => s == side.ID));
                 if (playedBy == null)
                 {
                     whosWho.Add(side, null);
