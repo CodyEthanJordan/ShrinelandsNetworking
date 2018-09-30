@@ -27,6 +27,7 @@ namespace Assets.Scripts.Controllers
         public UnitInfoPanel unitInfoPanel;
 
         [SerializeField] private Text serverIPText;
+        [SerializeField] private Text playerNameText;
         [SerializeField] private GameObject connectionPanel;
         public Client client;
 
@@ -52,6 +53,16 @@ namespace Assets.Scripts.Controllers
 
             mouseLook.enabled = false;
             unitInfoPanel.gameObject.SetActive(false);
+
+            LoadPlayerPrefs();
+        }
+
+        private void LoadPlayerPrefs()
+        {
+            if(PlayerPrefs.HasKey("PlayerName"))
+            {
+                playerNameText.text = PlayerPrefs.GetString("PlayerName");
+            }
         }
 
         private void Update()
@@ -133,7 +144,8 @@ namespace Assets.Scripts.Controllers
 
         public void EndTurn()
         {
-            client.SendToServer("end turn" + playingAsSide.ID);
+            NetworkMessage message = new NetworkMessage("end turn", playingAsSide.ID);
+            client.SendToServer(message);
         }
 
         public void ShowUnitStats(Guid unitRepresented)
@@ -250,7 +262,9 @@ namespace Assets.Scripts.Controllers
 
         public void ConnectToServer()
         {
-            client.ConnectToServer(serverIPText.text);
+            PlayerPrefs.SetString("PlayerName", playerNameText.text);
+            PlayerPrefs.Save();
+            client.ConnectToServer(serverIPText.text, playerNameText.text);
         }
     }
 

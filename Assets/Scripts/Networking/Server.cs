@@ -63,19 +63,53 @@ namespace Assets.Scripts.Networking
                     else
                     {
                         var allSides = battle.sides.Select(s => s.ID).ToList(); //set client to control all sides
-                        connectedClients.Add(new ClientInfo("DefaultName", recConnectionId, recHostId, allSides));
+                        connectedClients.Add(new ClientInfo("DefaultName", recConnectionId, recHostId, null));
                     }
                     break;
                 case NetworkEventType.DataEvent:
                     var json = Unzip(recBuffer);
-                    Request clientRequest = JsonConvert.DeserializeObject<Request>(json);
-                    HandleRequest(clientRequest, recHostId, recConnectionId);
-                    
+                    var message = JsonConvert.DeserializeObject<NetworkMessage>(json);
+                    HandleClientMessage(message, recConnectionId, recHostId);
+
                     break;
                 case NetworkEventType.DisconnectEvent:
                     var clientLost = connectedClients.First(c => c.HostID == recHostId && c.ConnectionID == recConnectionId);
                     connectedClients.Remove(clientLost);
                     Debug.Log("remote client event disconnected");
+                    break;
+            }
+        }
+
+        Dictionary<Guid, Guid?> WhosPlayingWhatSide()
+        {
+            Dictionary<Guid, Guid?> whosWho = new Dictionary<Guid, Guid?>();
+
+            foreach (var side in battle.sides)
+            {
+                var playedBy = connectedClients.FirstOrDefault(c => c.ControlledSides.Any(s => s == side.ID));
+                if(playedBy == null)
+                {
+                    whosWho.Add(side.ID, null);
+                }
+                else
+                {
+                    whosWho.Add(side.ID, playedBy.PlayerID);
+                }
+
+            }
+
+            return whosWho;
+        }
+
+        private void HandleClientMessage(NetworkMessage message, int recConnectionId, int recHostId)
+        {
+            switch(message.Type)
+            {
+                case "join game":
+                    PlayerInfo info = message.Contents as PlayerInfo;
+                    connectedClients.First(c => c.ConnectionID == recConnectionId).Name = info.Name;
+                    connectedClients.First(c => c.ConnectionID == recConnectionId).PlayerID = info.ID;
+                    SendBattleInfo(recHostId, recConnectionId);
                     break;
             }
         }
@@ -110,10 +144,13 @@ namespace Assets.Scripts.Networking
             }
         }
 
-        private void SendMessageToClient(int hostID, int connectionID, byte[] message)
+        private void SendMessageToClient(int hostID, int connectionID, NetworkMessage message)
         {
             byte error;
-            NetworkTransport.Send(hostID, connectionID, reliableChannelID, message, message.Length, out error);
+            var json = JsonConvert.SerializeObject(message);
+            var bytes = Zip(json);
+            NetworkTransport.Send(hostID, connectionID, reliableChannelID, bytes, bytes.Length, out error);
+
             if((NetworkError)error != NetworkError.Ok)
             {
                 Debug.LogError("Network error when sending: " + (NetworkError)error);
@@ -122,8 +159,6 @@ namespace Assets.Scripts.Networking
 
         private void SendBattleInfo(int hostID, int connectionID)
         {
-            string json = JsonConvert.SerializeObject(battle, Formatting.None);
-            var bytes = Zip(json);
             SendMessageToClient(hostID, connectionID, bytes);
         }
 

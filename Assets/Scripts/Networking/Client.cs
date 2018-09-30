@@ -22,8 +22,22 @@ namespace Assets.Scripts.Networking
         private float heartbeatRate = 3f;
         private bool connected = false;
 
+        public string PlayerName;
+        public Guid ID;
+
         private void Start()
         {
+            if (PlayerPrefs.HasKey("PlayerID"))
+            {
+                ID = new Guid(PlayerPrefs.GetString("PlayerID"));
+            }
+            else
+            {
+                ID = Guid.NewGuid();
+                PlayerPrefs.SetString("PlayerID", ID.ToString());
+                PlayerPrefs.Save();
+            }
+
             NetworkTransport.Init();
             ConnectionConfig config = new ConnectionConfig();
             reliableChannelID = config.AddChannel(QosType.Reliable);
@@ -34,11 +48,14 @@ namespace Assets.Scripts.Networking
         internal void MoveUnit(Guid unitRepresented, Vector3Int position)
         {
             var moveRequest = Request.ToMove(unitRepresented, position);
-            SendToServer("request " + JsonConvert.SerializeObject(moveRequest));
+            var Message = new NetworkMessage("take action", moveRequest);
+            SendToServer(Message);
         }
 
-        public void ConnectToServer(string address)
+        public void ConnectToServer(string address, string name)
         {
+            this.PlayerName = name;
+
             byte error;
             connectionID = NetworkTransport.Connect(hostID, address, serverSocketPort, 0, out error);
             if ((NetworkError)error != NetworkError.Ok)
@@ -48,9 +65,15 @@ namespace Assets.Scripts.Networking
             Debug.Log("Requesting connection from server " + address + ". ConnectionId: " + connectionID);
         }
 
+        public void SendToServer(NetworkMessage message)
+        {
+            SendToServer(JsonConvert.SerializeObject(message));
+        }
+
         public void SendToServer(string message)
         {
             byte error;
+            var compressedMessage = Zip(message);
             var buffer = Encoding.UTF8.GetBytes(message);
             var bufferLength = Encoding.UTF8.GetByteCount(message);
 
@@ -95,8 +118,11 @@ namespace Assets.Scripts.Networking
                     break;
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("incoming connection event received");
-                    RequestBattle();
                     connected = true;
+                    PlayerInfo info = new PlayerInfo();
+                    info.Name = PlayerName;
+                    info.ID = ID;
+                    SendToServer(new NetworkMessage("join game", info));
                     if(OnConnected != null)
                     {
                         OnConnected(this);

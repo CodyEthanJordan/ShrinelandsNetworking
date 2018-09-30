@@ -8,6 +8,7 @@ namespace Assets.Scripts.Networking
     public class ClientInfo
     {
         public string Name;
+        public Guid PlayerID;
         public int ConnectionID;
         public int HostID;
         public List<Guid> ControlledSides;
@@ -17,7 +18,14 @@ namespace Assets.Scripts.Networking
             this.Name = name;
             this.ConnectionID = connectionID;
             this.HostID = hostID;
-            this.ControlledSides = new List<Guid>(controlledSides);
+            if(controlledSides == null)
+            {
+                ControlledSides = new List<Guid>();
+            }
+            else
+            {
+                this.ControlledSides = new List<Guid>(controlledSides);
+            }
         }
     }
 }
