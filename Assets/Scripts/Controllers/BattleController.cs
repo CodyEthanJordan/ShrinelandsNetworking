@@ -29,6 +29,7 @@ namespace Assets.Scripts.Controllers
         [SerializeField] private Text serverIPText;
         [SerializeField] private Text playerNameText;
         [SerializeField] private GameObject connectionPanel;
+        [SerializeField] private GameObject chooseSidePanel;
         public Client client;
 
         private List<BlockRenderer> blocks = new List<BlockRenderer>();
@@ -50,11 +51,18 @@ namespace Assets.Scripts.Controllers
         {
             client.OnConnected += Connected;
             client.OnRecieveBattle += InitializeBattle;
+            client.OnRecieveSides += PickSides;
 
             mouseLook.enabled = false;
             unitInfoPanel.gameObject.SetActive(false);
 
             LoadPlayerPrefs();
+        }
+
+        private void PickSides(object source, Dictionary<Side, PlayerInfo> sides)
+        {
+            chooseSidePanel.SetActive(true);
+            chooseSidePanel.GetComponent<SidePicker>().ShowOptions(sides);
         }
 
         private void LoadPlayerPrefs()

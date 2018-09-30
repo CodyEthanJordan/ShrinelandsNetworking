@@ -110,6 +110,9 @@ namespace Assets.Scripts.Networking
                     SendBattleInfo(recHostId, recConnectionId);
                     break;
                 case "what sides":
+                    var whosWho = WhosPlayingWhatSide();
+                    SendMessageToClient(recHostId, recConnectionId, new NetworkMessage("sides", whosWho));
+                    break;
 
             }
         }

@@ -15,6 +15,7 @@ namespace Assets.Scripts.Networking
     {
         public event ConnectionEvent OnConnected;
         public event BattleRecieved OnRecieveBattle;
+        public event SidesRecieved OnRecieveSides;
 
         private int connectionID;
 
@@ -154,6 +155,14 @@ namespace Assets.Scripts.Networking
                     var askAboutSides = new NetworkMessage("what sides", null);
                     SendToServer(askAboutSides);
                     break;
+                case "sides":
+                    var whosWho = message.Contents as Dictionary<Side, PlayerInfo>;
+                    if(OnRecieveSides != null)
+                    {
+                        OnRecieveSides(this, whosWho);
+                    }
+                    break;
+
             }
         }
 
