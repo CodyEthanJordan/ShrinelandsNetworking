@@ -8,12 +8,12 @@ namespace Assets.Scripts.Networking
     public class NetworkMessage
     {
         public string Type;
-        public object Contents;
+        public string JsonContents;
 
-        public NetworkMessage(string type, object contents)
+        public NetworkMessage(string type, string contents)
         {
             this.Type = type;
-            this.Contents = contents;
+            this.JsonContents = contents;
         }
     }
 }

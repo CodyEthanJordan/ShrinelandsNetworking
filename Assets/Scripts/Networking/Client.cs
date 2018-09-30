@@ -49,7 +49,8 @@ namespace Assets.Scripts.Networking
         internal void MoveUnit(Guid unitRepresented, Vector3Int position)
         {
             var moveRequest = Request.ToMove(unitRepresented, position);
-            var Message = new NetworkMessage("take action", moveRequest);
+            var Message = new NetworkMessage("take action", 
+                JsonConvert.SerializeObject(moveRequest));
             SendToServer(Message);
         }
 
@@ -75,10 +76,8 @@ namespace Assets.Scripts.Networking
         {
             byte error;
             var compressedMessage = Zip(message);
-            var buffer = Encoding.UTF8.GetBytes(message);
-            var bufferLength = Encoding.UTF8.GetByteCount(message);
 
-            NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, bufferLength, out error);
+            NetworkTransport.Send(hostID, connectionID, reliableChannelID, compressedMessage, compressedMessage.Length, out error);
 
             if ((NetworkError)error != NetworkError.Ok)
             {
@@ -123,7 +122,8 @@ namespace Assets.Scripts.Networking
                     PlayerInfo info = new PlayerInfo();
                     info.Name = PlayerName;
                     info.ID = ID;
-                    SendToServer(new NetworkMessage("join game", info));
+                    SendToServer(new NetworkMessage("join game", 
+                        JsonConvert.SerializeObject(info)));
                     if(OnConnected != null)
                     {
                         OnConnected(this);
@@ -146,7 +146,7 @@ namespace Assets.Scripts.Networking
             switch(message.Type)
             {
                 case "load map":
-                    this.battle = message.Contents as Battle;
+                    this.battle = JsonConvert.DeserializeObject<Battle>(message.JsonContents);
                     if (OnRecieveBattle != null)
                     {
                         OnRecieveBattle(this, this.battle);
@@ -156,7 +156,7 @@ namespace Assets.Scripts.Networking
                     SendToServer(askAboutSides);
                     break;
                 case "sides":
-                    var whosWho = message.Contents as Dictionary<Side, PlayerInfo>;
+                    var whosWho = JsonConvert.DeserializeObject<Dictionary<Side, PlayerInfo>>(message.JsonContents);
                     if(OnRecieveSides != null)
                     {
                         OnRecieveSides(this, whosWho);

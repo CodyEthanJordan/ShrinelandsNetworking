@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.DungeonMaster;
 using Assets.Scripts.Networking;
 using Assets.Scripts.View;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -152,7 +153,8 @@ namespace Assets.Scripts.Controllers
 
         public void EndTurn()
         {
-            NetworkMessage message = new NetworkMessage("end turn", playingAsSide.ID);
+            NetworkMessage message = new NetworkMessage("end turn", 
+                JsonConvert.SerializeObject(playingAsSide.ID));
             client.SendToServer(message);
         }
 

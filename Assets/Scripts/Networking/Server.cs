@@ -105,13 +105,13 @@ namespace Assets.Scripts.Networking
             switch (message.Type)
             {
                 case "join game":
-                    PlayerInfo info = message.Contents as PlayerInfo;
+                    PlayerInfo info = JsonConvert.DeserializeObject<PlayerInfo>(message.JsonContents);
                     connectedClients.First(c => c.ConnectionID == recConnectionId).Player = info;
                     SendBattleInfo(recHostId, recConnectionId);
                     break;
                 case "what sides":
                     var whosWho = WhosPlayingWhatSide();
-                    SendMessageToClient(recHostId, recConnectionId, new NetworkMessage("sides", whosWho));
+                    SendMessageToClient(recHostId, recConnectionId, new NetworkMessage("sides", JsonConvert.SerializeObject(whosWho)));
                     break;
 
             }
@@ -140,7 +140,7 @@ namespace Assets.Scripts.Networking
         {
 
             //TODO: make in to generic function to send to all clients
-            var message = new NetworkMessage("results", results);
+            var message = new NetworkMessage("results", JsonConvert.SerializeObject(results));
 
             foreach (var client in connectedClients)
             {
@@ -163,7 +163,7 @@ namespace Assets.Scripts.Networking
 
         private void SendBattleInfo(int hostID, int connectionID)
         {
-            var message = new NetworkMessage("load map", battle);
+            var message = new NetworkMessage("load map", JsonConvert.SerializeObject(battle));
             SendMessageToClient(hostID, connectionID, message);
         }
 
