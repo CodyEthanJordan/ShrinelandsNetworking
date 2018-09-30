@@ -118,6 +118,13 @@ namespace Assets.Scripts.Networking
                         .ToDictionary(x => x.Key, x => x.Value);
                     SendMessageToClient(recHostId, recConnectionId, new NetworkMessage("sides", JsonConvert.SerializeObject(nameList)));
                     break;
+                case "play as":
+                    var playerIsPlaying = JsonConvert.DeserializeObject<List<Guid>>(message.JsonContents);
+                    connectedClients.First(c => c.ConnectionID == recConnectionId).Player.PlayingAsSideIDs = playerIsPlaying;
+                    var newPlayerMessage = new NetworkMessage("new player",
+                        JsonConvert.SerializeObject(connectedClients.Select(c => c.Player).ToList()));
+                    SendToAllClients(newPlayerMessage);
+                    break;
 
             }
         }
@@ -143,10 +150,13 @@ namespace Assets.Scripts.Networking
 
         private void TellClientsAboutResult(List<Result> results)
         {
-
-            //TODO: make in to generic function to send to all clients
             var message = new NetworkMessage("results", JsonConvert.SerializeObject(results));
 
+            SendToAllClients(message);
+        }
+
+        private void SendToAllClients(NetworkMessage message)
+        {
             foreach (var client in connectedClients)
             {
                 SendMessageToClient(client.HostID, client.ConnectionID, message);

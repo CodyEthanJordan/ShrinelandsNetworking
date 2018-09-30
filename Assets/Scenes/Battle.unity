@@ -502,7 +502,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 249603570}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1174951990}
+        m_MethodName: PlayGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &249603570
@@ -1677,7 +1688,7 @@ MonoBehaviour:
   serverIPText: {fileID: 865051711}
   playerNameInput: {fileID: 1701597127}
   connectionPanel: {fileID: 1290846462}
-  chooseSidePanel: {fileID: 0}
+  chooseSidePanel: {fileID: 1174951986}
   client: {fileID: 574842053}
   FSM: {fileID: 0}
 --- !u!1 &1100765055

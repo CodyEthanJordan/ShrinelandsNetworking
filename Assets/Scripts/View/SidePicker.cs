@@ -15,9 +15,11 @@ namespace Assets.Scripts.View
         public BattleController bc;
         public GameObject sidesList;
         public GameObject SideTogglePrefab;
+        private Dictionary<Guid, string> sidesAndPlayers;
 
         public void ShowOptions(Battle battle, Dictionary<Guid, string> sides)
         {
+            this.sidesAndPlayers = sides;
             foreach (Transform child in sidesList.transform)
             {
                 Destroy(child.gameObject);
@@ -39,7 +41,17 @@ namespace Assets.Scripts.View
 
         public void PlayGame()
         {
+            List<Guid> playAs = new List<Guid>();
+            int i = 0;
+            foreach (Transform child in sidesList.transform)
+            {
+                if(child.gameObject.GetComponent<Toggle>().isOn)
+                {
+                    playAs.Add(sidesAndPlayers.ToList()[i].Key);
+                }
+            }
 
+            bc.PlayAs(playAs);
         }
     }
 }

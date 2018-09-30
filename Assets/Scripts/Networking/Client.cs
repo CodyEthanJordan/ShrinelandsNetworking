@@ -16,6 +16,7 @@ namespace Assets.Scripts.Networking
         public event ConnectionEvent OnConnected;
         public event BattleRecieved OnRecieveBattle;
         public event SidesRecieved OnRecieveSides;
+        public event StartPlayAs OnStartPlay;
 
         private int connectionID;
 
@@ -52,6 +53,13 @@ namespace Assets.Scripts.Networking
             var Message = new NetworkMessage("take action", 
                 JsonConvert.SerializeObject(moveRequest));
             SendToServer(Message);
+        }
+
+        internal void PlayAs(List<Guid> playAs)
+        {
+            var message = new NetworkMessage("playing as",
+                JsonConvert.SerializeObject(playAs));
+            SendToServer(message);
         }
 
         public void ConnectToServer(string address, string name)
@@ -161,6 +169,15 @@ namespace Assets.Scripts.Networking
                     {
                         OnRecieveSides(this, whosWho);
                     }
+                    break;
+                case "new player": //TODO: maybe need new player for "player is connected" message and specific call to start game
+                    var playerInfo = JsonConvert.DeserializeObject<List<PlayerInfo>>(message.JsonContents);
+                    var me = playerInfo.First(p => p.ID == this.ID);
+                    if(OnStartPlay != null)
+                    {
+                        OnStartPlay(this, me.PlayingAsSideIDs);
+                    }
+
                     break;
 
             }

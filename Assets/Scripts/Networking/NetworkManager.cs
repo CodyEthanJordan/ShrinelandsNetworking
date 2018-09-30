@@ -65,4 +65,5 @@ namespace Assets.Scripts.Networking
     public delegate void ConnectionEvent(object source);
     public delegate void BattleRecieved(object source, Battle battle);
     public delegate void SidesRecieved(object source, Dictionary<Guid, string> sides);
+    public delegate void StartPlayAs(object source, List<Guid> playSides);
 }

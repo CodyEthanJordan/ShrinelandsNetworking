@@ -42,10 +42,17 @@ namespace Assets.Scripts.Controllers
         public event DirectionChosenEvent OnChooseDirection;
 
         public Side playingAsSide;
+        private List<Guid> sidesPlayed;
 
         private void Awake()
         {
             FSM = GetComponent<Animator>();
+        }
+
+        internal void PlayAs(List<Guid> playAs)
+        {
+            chooseSidePanel.SetActive(false);
+            client.PlayAs(playAs);
         }
 
         private void Start()
@@ -53,11 +60,18 @@ namespace Assets.Scripts.Controllers
             client.OnConnected += Connected;
             client.OnRecieveBattle += InitializeBattle;
             client.OnRecieveSides += PickSides;
+            client.OnStartPlay += StartPlaying;
 
             mouseLook.enabled = false;
             unitInfoPanel.gameObject.SetActive(false);
 
             LoadPlayerPrefs();
+        }
+
+        private void StartPlaying(object source, List<Guid> playSides)
+        {
+            sidesPlayed = playSides;
+            FSM.SetTrigger("GotBattle");
         }
 
         private void PickSides(object source, Dictionary<Guid, string> sides)
@@ -261,8 +275,6 @@ namespace Assets.Scripts.Controllers
 
                 units.Add(ur);
             }
-
-            FSM.SetTrigger("GotBattle");
         }
 
         private void Connected(object source)
