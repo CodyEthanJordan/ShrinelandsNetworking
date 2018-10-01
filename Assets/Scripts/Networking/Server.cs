@@ -125,18 +125,19 @@ namespace Assets.Scripts.Networking
                         JsonConvert.SerializeObject(connectedClients.Select(c => c.Player).ToList()));
                     SendToAllClients(newPlayerMessage);
                     break;
+                case "take action":
+                    var action = JsonConvert.DeserializeObject<Request>(message.JsonContents);
+                    HandleRequest(action);
+                    break;
 
             }
         }
 
-        private void HandleRequest(Request request, int clientHostID, int clientConnectionID)
+        private void HandleRequest(Request request)
         {
             List<Result> results = null;
             switch (request.Type)
             {
-                case "Join Game":
-                    SendBattleInfo(clientHostID, clientConnectionID);
-                    break;
                 case "Move":
                     results = battle.MoveUnit(request.Unit, request.Target);
                     break;

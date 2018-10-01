@@ -125,5 +125,13 @@ namespace Assets.Scripts.DungeonMaster
         {
             throw new NotImplementedException();
         }
+
+        internal void HandleResults(List<Result> results)
+        {
+            foreach (var result in results)
+            {
+                HandleResult(result);
+            }
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace Assets.Scripts.Networking
         internal void MoveUnit(Guid unitRepresented, Vector3Int position)
         {
             var moveRequest = Request.ToMove(unitRepresented, position);
-            var Message = new NetworkMessage("take action", 
+            var Message = new NetworkMessage("take action",
                 JsonConvert.SerializeObject(moveRequest));
             SendToServer(Message);
         }
@@ -93,14 +93,9 @@ namespace Assets.Scripts.Networking
             }
         }
 
-        private void RequestBattle()
-        {
-            SendToServer("send battle");
-        }
-
         private void Update()
         {
-            if(connected)
+            if (connected)
             {
                 Heartbeat();
             }
@@ -130,9 +125,9 @@ namespace Assets.Scripts.Networking
                     PlayerInfo info = new PlayerInfo();
                     info.Name = PlayerName;
                     info.ID = ID;
-                    SendToServer(new NetworkMessage("join game", 
+                    SendToServer(new NetworkMessage("join game",
                         JsonConvert.SerializeObject(info)));
-                    if(OnConnected != null)
+                    if (OnConnected != null)
                     {
                         OnConnected(this);
                     }
@@ -151,7 +146,7 @@ namespace Assets.Scripts.Networking
 
         private void HandleMessageFromServer(NetworkMessage message)
         {
-            switch(message.Type)
+            switch (message.Type)
             {
                 case "load map":
                     this.battle = JsonConvert.DeserializeObject<Battle>(message.JsonContents);
@@ -165,7 +160,7 @@ namespace Assets.Scripts.Networking
                     break;
                 case "sides":
                     var whosWho = JsonConvert.DeserializeObject<Dictionary<Guid, string>>(message.JsonContents);
-                    if(OnRecieveSides != null)
+                    if (OnRecieveSides != null)
                     {
                         OnRecieveSides(this, whosWho);
                     }
@@ -173,32 +168,23 @@ namespace Assets.Scripts.Networking
                 case "new player": //TODO: maybe need new player for "player is connected" message and specific call to start game
                     var playerInfo = JsonConvert.DeserializeObject<List<PlayerInfo>>(message.JsonContents);
                     var me = playerInfo.First(p => p.ID == this.ID);
-                    if(OnStartPlay != null)
+                    if (OnStartPlay != null)
                     {
                         OnStartPlay(this, me.PlayingAsSideIDs);
                     }
+                    break;
+                case "results":
+                    var results = JsonConvert.DeserializeObject<List<Result>>(message.JsonContents);
 
                     break;
 
             }
         }
 
-        private void RecievedBattle(byte[] buffer, int dataSize)
-        {
-            string battleJson = Unzip(buffer);
-
-            this.battle = JsonConvert.DeserializeObject<Battle>(battleJson);
-
-            if(OnRecieveBattle != null)
-            {
-                OnRecieveBattle(this, this.battle);
-            }
-        }
-
         private void Heartbeat()
         {
             heartbeatTimer += Time.deltaTime;
-            if(heartbeatTimer > heartbeatRate)
+            if (heartbeatTimer > heartbeatRate)
             {
                 heartbeatTimer = 0;
                 var message = new NetworkMessage("heartbeat", null);
