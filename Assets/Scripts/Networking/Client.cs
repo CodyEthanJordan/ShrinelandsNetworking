@@ -175,7 +175,7 @@ namespace Assets.Scripts.Networking
                     break;
                 case "results":
                     var results = JsonConvert.DeserializeObject<List<Result>>(message.JsonContents);
-
+                    battle.HandleResults(results);
                     break;
 
             }
