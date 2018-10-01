@@ -18,6 +18,19 @@ namespace Assets.Scripts.Controllers
         public GameObject TargetCubePrefab;
         public Camera Cam;
 
+        internal bool CanCommand(Unit unitRepresented)
+        {
+            if(client.battle.currentSide.ID != unitRepresented.SideID)
+            {
+                return false; //not this unit's turn
+            }
+            else
+            {
+                // TODO: make this actually work
+                return true;
+            }
+        }
+
         public float Speed;
         public SmoothMouseLook mouseLook;
 

@@ -105,7 +105,8 @@ namespace Assets.Scripts.DungeonMaster
             else
             {
                 unit.MoveTo(target, standingOn.MoveCost);
-                results.Add(new Result("Move", unit, target));
+                var result = new Result(Result.ResultType.Movement, "Move", unit.Name + " moved to " + target,
+                    new Effect(unit));
                 return results;
             }
         }
@@ -114,7 +115,7 @@ namespace Assets.Scripts.DungeonMaster
         {
             switch (result.Type)
             {
-                case "Move":
+                case Result.ResultType.Movement:
                     var unit = units.First(u => u.ID == result.UnitAffected.ID);
                     unit.HandleResult(result);
                     break;
@@ -123,7 +124,21 @@ namespace Assets.Scripts.DungeonMaster
 
         internal List<Result> EndTurn(Guid sideID)
         {
-            throw new NotImplementedException();
+            if(sideID != currentSide.ID)
+            {
+                //how did we end up here
+                //TODO: logging
+                return null;
+            }
+
+            List<Result> results = new List<Result>();
+
+            foreach (var unit in units)
+            {
+                results.Add(unit.EndTurn());
+            }
+
+            return results;
         }
 
         internal void HandleResults(List<Result> results)

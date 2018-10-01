@@ -9,15 +9,35 @@ namespace Assets.Scripts.Networking
 {
     public class Result
     {
-        public string Type;
-        public Unit UnitAffected;
-        public Vector3Int Target;
+        public ResultType Type;
+        public string Title;
+        public string Description;
+        public List<Effect> Effects;
 
-        public Result(string type, Unit unitAffected, Vector3Int target)
+        public Result(ResultType type, string title, string description, Effect effect)
         {
             this.Type = type;
-            this.UnitAffected = unitAffected;
-            this.Target = target;
+            this.Title = title;
+            this.Description = description;
+            Effects = new List<Effect>();
+            Effects.Add(effect);
+        }
+
+        public enum ResultType
+        {
+            Movement,
+            GenericUpdate
+        }
+    }
+
+    public class Effect
+    {
+        // TODO: deck
+        public Unit NewStatus;
+
+        public Effect(Unit newStatus)
+        {
+            this.NewStatus = newStatus;
         }
     }
 }

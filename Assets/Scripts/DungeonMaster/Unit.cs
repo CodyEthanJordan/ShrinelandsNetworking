@@ -79,6 +79,11 @@ namespace Assets.Scripts.DungeonMaster
                 OnStatsChanged(this, this);
             }
         }
+
+        public Result EndTurn()
+        {
+            
+        }
     }
 
     public delegate void UnitMovedEvent(object source, Guid ID, Vector3Int oldPos, Vector3Int newPos);

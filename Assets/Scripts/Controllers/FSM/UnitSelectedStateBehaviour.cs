@@ -13,9 +13,13 @@ namespace Assets.Scripts.Controllers.FSM
             base.OnStateEnter(animator, stateInfo, layerIndex);
 
             bc.ShowUnitStats(bc.SelectedUnit.UnitRepresented.ID);
-            bc.RenderMovementOptions(bc.SelectedUnit.UnitRepresented.ID);
-            bc.OnTargetClick += MoveUnit;
-            bc.OnChooseDirection += MoveUnitDirection;
+
+            if (bc.CanCommand(bc.SelectedUnit.UnitRepresented))
+            {
+                bc.RenderMovementOptions(bc.SelectedUnit.UnitRepresented.ID);
+                bc.OnTargetClick += MoveUnit;
+                bc.OnChooseDirection += MoveUnitDirection;
+            }
         }
 
         private void MoveUnitDirection(object source, Vector3Int dir)
@@ -39,6 +43,6 @@ namespace Assets.Scripts.Controllers.FSM
             bc.OnTargetClick -= MoveUnit;
             bc.OnChooseDirection -= MoveUnitDirection;
         }
-      
+
     }
 }

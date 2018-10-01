@@ -129,6 +129,11 @@ namespace Assets.Scripts.Networking
                     var action = JsonConvert.DeserializeObject<Request>(message.JsonContents);
                     HandleRequest(action);
                     break;
+                case "end turn":
+                    var sideId = JsonConvert.DeserializeObject<Guid>(message.JsonContents);
+                    var results = battle.EndTurn(sideId);
+                    TellClientsAboutResult(results);
+                    break;
 
             }
         }
