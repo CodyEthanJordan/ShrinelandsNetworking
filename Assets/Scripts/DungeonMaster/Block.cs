@@ -9,6 +9,7 @@ namespace Assets.Scripts.DungeonMaster
     {
         public string Name;
         public bool Solid;
+        public bool Buoyant;
         public int MoveCost;
 
         Block()
@@ -45,13 +46,23 @@ namespace Assets.Scripts.DungeonMaster
                 case '.':
                     return Block.GetDebugAir();
                 case '!':
-                    return new Block("lava", false, 1);
+                    var lava = new Block("lava", false, 1);
+                    lava.Buoyant = true;
+                    return lava;
                 case ']':
                     return new Block("tree", true, 1);
                 case '%':
                     return new Block("shrubbery", false, 1);
                 default:
                     return Block.GetDebugAir();
+            }
+        }
+
+        internal void ApplyBlockEffects(Unit unit)
+        {
+            if(Name == "lava")
+            {
+                unit.TakeDamage(5);
             }
         }
     }

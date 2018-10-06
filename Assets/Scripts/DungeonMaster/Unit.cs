@@ -58,6 +58,12 @@ namespace Assets.Scripts.DungeonMaster
             return dude;
         }
 
+        internal void TakeDamage(int dmg)
+        {
+            //TODO: check damage type, make sure HP doesn't fall below 0, fire events
+            HP.Current -= dmg;
+        }
+
         public void HandleResult(Result result)
         {
             switch(result.Type)

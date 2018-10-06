@@ -2,11 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.DungeonMaster
 {
     public class DebugData
     {
+        public static Battle GetFunDebugBattle()
+        {
+            var defaultBattle = new Battle();
+
+            defaultBattle.map = Map.FromString(DebugData.FunMap);
+
+            defaultBattle.sides.Add(new Side("The Player", "#0000FF"));
+            defaultBattle.sides.Add(new Side("The Foe", "#FF0000"));
+
+            defaultBattle.units.Add(Unit.GetDefaultDude("Charlie", defaultBattle.sides[0].ID,
+                new Vector3Int(18, 8, 6)));
+            defaultBattle.units.Add(Unit.GetDefaultDude("Robby", defaultBattle.sides[0].ID,
+                new Vector3Int(5, 5, 1)));
+
+            defaultBattle.units.Add(Unit.GetDefaultDude("JJ", defaultBattle.sides[1].ID,
+                new Vector3Int(15, 4, 3)));
+            defaultBattle.units.Add(Unit.GetDefaultDude("Zach", defaultBattle.sides[1].ID,
+                new Vector3Int(18, 12, 6)));
+
+            defaultBattle.currentSide = defaultBattle.sides[0];
+
+            return defaultBattle;
+        }
+
         public static readonly string FunMap = @"25 25 10
 BBBBBBBBBBBBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBBBBBBBBBBBB

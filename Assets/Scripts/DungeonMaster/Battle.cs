@@ -124,7 +124,7 @@ namespace Assets.Scripts.DungeonMaster
         public List<Result> MoveUnit(Guid unitID, Vector3Int target)
         {
             var unit = units.First(u => u.ID == unitID);
-            var standingOn = map.BlockAt(unit.Position + new Vector3Int(0, 0, -1));
+            var standingOn = map.StandingOn(unit);
             List<Result> results = new List<Result>();
 
             if (!IsPassable(target))
@@ -140,6 +140,18 @@ namespace Assets.Scripts.DungeonMaster
                 unit.MoveTo(target, standingOn.MoveCost);
                 var result = new Result(Result.ResultType.Movement, "Move", unit.Name + " moved to " + target,
                     new Effect(unit));
+
+                //check block effects
+                var newBlock = map.BlockAt(unit.Position);
+                newBlock.ApplyBlockEffects(unit);
+
+                // not standing on anything solid and not swimming
+                if(!map.StandingOn(unit).Solid && !newBlock.Buoyant)
+                {
+                    // TODO: fall damage
+                    MoveUnit(unit.ID, unit.Position + new Vector3Int(0, 0, -1));
+                }
+
                 return results;
             }
         }

@@ -114,6 +114,13 @@ namespace Assets.Scripts.DungeonMaster
 
         }
 
+        public Block StandingOn(Unit unit)
+        {
+            //TODO: check for swimming?
+            var pos = unit.Position + new Vector3Int(0, 0, -1);
+            return BlockAt(pos);
+        }
+
         public static Map FromString(string mapString)
         {
             var sr = new StringReader(mapString);
