@@ -55,16 +55,33 @@ namespace BattleTests
         }
 
         [TestMethod]
+        public void RobbyEscapesACanyonWithFoulMagic()
+        {
+            //create ooze and swim up it
+            var b = DebugData.GetFunDebugBattle();
+            var robby = b.units.First(u => u.Name == "Robby");
+
+            //create ooze
+            //swim to edge
+            //move ooze up
+
+            //pass turn
+            //other side pass
+
+            //continue to ascend
+        }
+
+        [TestMethod]
         public void TestStringOutput()
         {
             Battle b = DebugData.GetFunDebugBattle();
             string output = b.ShowBattle();
             Assert.AreEqual(output[0], '2');
-            using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(@"battletest.txt"))
-            {
-                file.Write(output);
-            }
+            //using (System.IO.StreamWriter file =
+            //new System.IO.StreamWriter(@"battletest.txt"))
+            //{
+            //    file.Write(output);
+            //}
         }
 
 
