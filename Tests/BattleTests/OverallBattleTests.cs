@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assets.Scripts.DungeonMaster;
+using System.Linq;
 
 namespace BattleTests
 {
@@ -12,6 +13,16 @@ namespace BattleTests
         {
             Battle b = Battle.GetDebugBattle();
             Assert.IsNotNull(b);
+        }
+
+        [TestMethod]
+        public void BasicMove()
+        {
+            Battle b = Battle.GetDebugBattle();
+            Unit charlie = b.units.First(u => u.Name == "Charlie");
+            Unit jj = b.units.First(u => u.Name == "JJ");
+            b.MakeMove(charlie.ID, Map.Direction.North);
+            Assert.IsTrue(Battle.IsAdjacent(charlie, jj));
         }
 
 

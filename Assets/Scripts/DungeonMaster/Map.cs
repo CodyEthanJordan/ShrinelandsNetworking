@@ -66,6 +66,32 @@ namespace Assets.Scripts.DungeonMaster
             North, South, East, West, Up, Down
         }
 
+        public static Vector3Int VectorFromDirection(Direction dir)
+        {
+            switch(dir)
+            {
+                case Direction.North:
+                    return new Vector3Int(0, 1, 0);
+                    break;
+                case Direction.South:
+                    return new Vector3Int(0, -1, 0);
+                    break;
+                case Direction.East:
+                    return new Vector3Int(1, 0, 0);
+                    break;
+                case Direction.West:
+                    return new Vector3Int(-1, 0, 0);
+                    break;
+                case Direction.Up:
+                    return new Vector3Int(0, 0, 1);
+                    break;
+                case Direction.Down:
+                    return new Vector3Int(0, 0, -1);
+                    break;
+            }
+            return Vector3Int.zero; //should never happen, TODO: log and test
+        }
+
         public static readonly List<Vector3Int> CardinalDirections = new List<Vector3Int>()
         {
             Vector3Int.up, Vector3Int.right, Vector3Int.down, Vector3Int.left

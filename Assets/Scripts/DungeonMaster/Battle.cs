@@ -42,6 +42,12 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
+        public static bool IsAdjacent(Unit a, Unit b)
+        {
+            var diff = a.Position - b.Position;
+            return Map.CardinalDirections.Contains(diff);
+        }
+
         public Dictionary<Vector3Int, Vector3Int> GetValidMovements(Guid unitID)
         {
             Dictionary<Vector3Int, Vector3Int> allowedDestinations = new Dictionary<Vector3Int, Vector3Int>();
@@ -69,7 +75,7 @@ namespace Assets.Scripts.DungeonMaster
             defaultBattle.sides.Add(new Side("The Foe", "#FF0000"));
 
             defaultBattle.units.Add(Unit.GetDefaultDude("Charlie", defaultBattle.sides[0].ID,
-                new Vector3Int(3, 3, 3)));
+                new Vector3Int(5, 3, 3)));
             defaultBattle.units.Add(Unit.GetDefaultDude("Robby", defaultBattle.sides[0].ID,
                 new Vector3Int(3, 5, 3)));
 
@@ -83,9 +89,10 @@ namespace Assets.Scripts.DungeonMaster
             return defaultBattle;
         }
 
-        public void MakeMove(Guid unitID, Map.Direction direction)
+        public List<Result> MakeMove(Guid unitID, Map.Direction direction)
         {
-
+            var unit = units.First(u => u.ID == unitID);
+            return MoveUnit(unitID, unit.Position + Map.VectorFromDirection(direction));
         }
 
         public List<Result> MoveUnit(Guid unitID, Vector3Int target)
