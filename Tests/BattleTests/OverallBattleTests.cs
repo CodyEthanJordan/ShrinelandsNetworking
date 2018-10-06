@@ -5,7 +5,7 @@ using Assets.Scripts.DungeonMaster;
 namespace BattleTests
 {
     [TestClass]
-    public class UnitTest1
+    public class OverallBattleTests
     {
         [TestMethod]
         public void BattleExists()
@@ -13,5 +13,7 @@ namespace BattleTests
             Battle b = Battle.GetDebugBattle();
             Assert.IsNotNull(b);
         }
+
+
     }
 }

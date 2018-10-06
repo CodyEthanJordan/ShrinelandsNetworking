@@ -77,12 +77,12 @@ namespace Assets.Scripts.DungeonMaster
             return Math.Abs(difference.x) + Math.Abs(difference.y) + Math.Abs(difference.z);
         }
 
-        internal static bool IsRookMove(Vector3Int a, Vector3Int b)
+        public static bool IsRookMove(Vector3Int a, Vector3Int b)
         {
             var diff = a - b;
-            int zeroDimensions = diff.x == 0 ? 1 : 0 +
-                                 diff.y == 0 ? 1 : 0 +
-                                 diff.z == 0 ? 1 : 0;
+            int zeroDimensions = (diff.x == 0 ? 1 : 0) +
+                                 (diff.y == 0 ? 1 : 0) +
+                                 (diff.z == 0 ? 1 : 0);
             return zeroDimensions >= 2;
 
         }
