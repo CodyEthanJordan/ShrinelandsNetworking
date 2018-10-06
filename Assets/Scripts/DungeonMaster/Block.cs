@@ -58,6 +58,27 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
+        public char GetChar()
+        {
+            switch(Name)
+            {
+                case "stone":
+                    return '#';
+                case "lava":
+                    return '!';
+                case "air":
+                    return '.';
+                case "tree":
+                    return ']';
+                case "shrubbery":
+                    return '%';
+                case "bedrock":
+                    return 'B';
+                default:
+                    return '.';
+            }
+        }
+
         internal void ApplyBlockEffects(Unit unit)
         {
             if(Name == "lava")

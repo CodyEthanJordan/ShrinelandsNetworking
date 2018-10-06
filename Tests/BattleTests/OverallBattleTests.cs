@@ -54,7 +54,18 @@ namespace BattleTests
             Assert.AreEqual(4, zach.Position.z);
         }
 
-
+        [TestMethod]
+        public void TestStringOutput()
+        {
+            Battle b = DebugData.GetFunDebugBattle();
+            string output = b.ShowBattle();
+            Assert.AreEqual(output[0], '2');
+            using (System.IO.StreamWriter file =
+            new System.IO.StreamWriter(@"battletest.txt"))
+            {
+                file.Write(output);
+            }
+        }
 
 
 

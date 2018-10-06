@@ -202,6 +202,19 @@ namespace Assets.Scripts.DungeonMaster
             return results;
         }
 
+        public string ShowBattle()
+        {
+            var output = new StringBuilder(map.ShowMap());
+
+            foreach (var unit in units)
+            {
+                int i = map.GetStringIndex(unit.Position);
+                output[i] = unit.Name[0];
+            }
+
+            return output.ToString();
+        }
+
         internal void HandleResults(List<Result> results)
         {
             foreach (var result in results)

@@ -52,7 +52,7 @@ namespace Assets.Scripts.DungeonMaster
             {
                 for (int j = 0; j < debugMap.Shape[1]; j++)
                 {
-                    for (int k = 0; k < debugMap.Shape[2]/2; k++)
+                    for (int k = 0; k < debugMap.Shape[2] / 2; k++)
                     {
                         debugMap.Blocks[i][j][k] = Block.GetDebugDirt();
                     }
@@ -69,7 +69,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public static Vector3Int VectorFromDirection(Direction dir)
         {
-            switch(dir)
+            switch (dir)
             {
                 case Direction.North:
                     return new Vector3Int(0, 1, 0);
@@ -130,7 +130,7 @@ namespace Assets.Scripts.DungeonMaster
 
             for (int k = 0; k < size[2]; k++)
             {
-                for (int j = size[1]-1; j >= 0; j--)
+                for (int j = size[1] - 1; j >= 0; j--)
                 {
                     string line = sr.ReadLine();
                     for (int i = 0; i < size[0]; i++)
@@ -142,6 +142,52 @@ namespace Assets.Scripts.DungeonMaster
             }
 
             return m;
+        }
+
+        public string ShowMap()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(this.Shape[0].ToString() + " " + this.Shape[1].ToString() +
+                " " + this.Shape[2].ToString());
+            for (int k = 0; k < this.Shape[2]; k++)
+            {
+                for (int j = this.Shape[1] - 1; j >= 0; j--)
+                {
+                    for (int i = 0; i < this.Shape[0]; i++)
+                    {
+                        sb.Append(BlockAt(new Vector3Int(i, j, k)).GetChar());
+                    }
+                    sb.AppendLine("");
+                }
+                sb.AppendLine("");
+            }
+
+            return sb.ToString();
+        }
+
+        internal int GetStringIndex(Vector3Int position)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(this.Shape[0].ToString() + " " + this.Shape[1].ToString() +
+                " " + this.Shape[2].ToString());
+            for (int k = 0; k < this.Shape[2]; k++)
+            {
+                for (int j = this.Shape[1] - 1; j >= 0; j--)
+                {
+                    for (int i = 0; i < this.Shape[0]; i++)
+                    {
+                        if(position == new Vector3Int(i,j,k))
+                        {
+                            return sb.Length;
+                        }
+                        sb.Append(BlockAt(new Vector3Int(i, j, k)).GetChar());
+                    }
+                    sb.AppendLine("");
+                }
+                sb.AppendLine("");
+            }
+
+            return -1;
         }
     }
 }

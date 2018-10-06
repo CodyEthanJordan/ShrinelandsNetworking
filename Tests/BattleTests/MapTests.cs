@@ -24,5 +24,18 @@ namespace BattleTests
             Assert.AreEqual("bedrock", m.BlockAt(new Vector3Int(5, 5, 0)).Name);
             Assert.AreEqual("lava", m.BlockAt(new Vector3Int(13, 10, 4)).Name);
         }
+
+        [TestMethod]
+        public void TestStringOutput()
+        {
+            Map m = Map.FromString(DebugData.FunMap);
+            string output = m.ShowMap();
+            Assert.AreEqual(output[0], '2');
+            //using (System.IO.StreamWriter file =
+            //new System.IO.StreamWriter(@"maptest.txt"))
+            //{
+            //    file.Write(output);
+            //}
+        }
     }
 }
