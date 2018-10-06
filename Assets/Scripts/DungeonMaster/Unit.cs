@@ -15,6 +15,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public Stat HP;
         public Stat Movement;
+        public Stat Stamina;
         public Vector3Int Position = new Vector3Int();
 
         public event UnitMovedEvent OnUnitMoved;
@@ -56,15 +57,6 @@ namespace Assets.Scripts.DungeonMaster
         {
             switch(result.Type)
             {
-                case "Move":
-                    Vector3Int oldPos = Position;
-                    this.Position = result.UnitAffected.Position;
-                    if(OnUnitMoved != null)
-                    {
-                        OnUnitMoved(this, ID, oldPos, Position);
-                    }
-                    UpdateStats(result.UnitAffected);
-                    break;
             }
         }
 
@@ -82,7 +74,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public Result EndTurn()
         {
-            
+            return null; 
         }
     }
 

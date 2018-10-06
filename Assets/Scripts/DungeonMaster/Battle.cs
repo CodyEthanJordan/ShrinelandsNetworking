@@ -116,8 +116,6 @@ namespace Assets.Scripts.DungeonMaster
             switch (result.Type)
             {
                 case Result.ResultType.Movement:
-                    var unit = units.First(u => u.ID == result.UnitAffected.ID);
-                    unit.HandleResult(result);
                     break;
             }
         }
@@ -136,6 +134,24 @@ namespace Assets.Scripts.DungeonMaster
             foreach (var unit in units)
             {
                 results.Add(unit.EndTurn());
+            }
+
+            return results;
+        }
+
+        public List<Result> CastMagicMissile(Unit caster, Vector3Int target)
+        {
+            int spellCost = 2;
+            var results = new List<Result>();
+            // first validate if this is possible
+            if(caster.Stamina.Current < spellCost)
+            {
+                return null; //doesn't have suffecient stamina
+            }
+            
+            if(!Map.IsRookMove(caster.Position, target))
+            {
+                return null; //magic missle can only be cast in straight lines
             }
 
             return results;
