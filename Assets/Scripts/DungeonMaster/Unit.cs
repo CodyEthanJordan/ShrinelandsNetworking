@@ -16,6 +16,8 @@ namespace Assets.Scripts.DungeonMaster
         public Stat HP;
         public Stat Movement;
         public Stat Stamina;
+        public Stat Expertise;
+        public Stat Strength;
         public Vector3Int Position = new Vector3Int();
 
         public event UnitMovedEvent OnUnitMoved;
@@ -49,6 +51,9 @@ namespace Assets.Scripts.DungeonMaster
             var dude = new Unit(name, sideID, pos);
             dude.HP = new Stat(8,8);
             dude.Movement = new Stat(5,5);
+            dude.Stamina = new Stat(5, 5);
+            dude.Expertise = new Stat(4, 4);
+            dude.Strength = new Stat(4, 4);
 
             return dude;
         }

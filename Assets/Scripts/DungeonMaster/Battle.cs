@@ -48,6 +48,32 @@ namespace Assets.Scripts.DungeonMaster
             return Map.CardinalDirections.Contains(diff);
         }
 
+        public void BasicAttack(Guid unitID, Map.Direction dir, int? outcome_index = null)
+        {
+            //TODO: add results?
+            var unit = units.First(u => u.ID == unitID);
+            var targetPos = unit.Position + Map.VectorFromDirection(dir);
+            var targetedUnit = units.FirstOrDefault(u => u.Position == targetPos);
+            if(targetedUnit == null)
+            {
+                return; //no one to attack
+            }
+
+            var card = Deck.BasicDraw(unit.Expertise.Current, 0, targetedUnit.Stamina.Current, outcome_index);
+
+            switch(card)
+            {
+                case Deck.CardType.Hit:
+                    targetedUnit.HP.Current -= unit.Strength.Current;
+                    break;
+                case Deck.CardType.Armor:
+                    throw new NotImplementedException();
+                    break;
+                case Deck.CardType.Dodge:
+                    break;
+            }
+        }
+
         public Dictionary<Vector3Int, Vector3Int> GetValidMovements(Guid unitID)
         {
             Dictionary<Vector3Int, Vector3Int> allowedDestinations = new Dictionary<Vector3Int, Vector3Int>();
