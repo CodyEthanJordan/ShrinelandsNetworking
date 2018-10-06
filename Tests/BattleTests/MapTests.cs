@@ -15,5 +15,14 @@ namespace BattleTests
             Assert.IsTrue(Map.IsRookMove(new Vector3Int(2, 2, 2), new Vector3Int(2, -10, 2)));
             Assert.IsFalse(Map.IsRookMove(new Vector3Int(0, 5, -6), new Vector3Int(0, 10, 0)));
         }
+
+        [TestMethod]
+        public void FromStringTest()
+        {
+            Map m = Map.FromString(DebugData.FunMap);
+
+            Assert.AreEqual("bedrock", m.BlockAt(new Vector3Int(5, 5, 0)).Name);
+            Assert.AreEqual("lava", m.BlockAt(new Vector3Int(13, 10, 4)).Name);
+        }
     }
 }

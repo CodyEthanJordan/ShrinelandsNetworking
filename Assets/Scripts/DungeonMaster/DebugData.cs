@@ -7,7 +7,7 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class DebugData
     {
-        static readonly string FunMap = @"
+        public static readonly string FunMap = @"25 25 10
 BBBBBBBBBBBBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBBBBBBBBBBBB

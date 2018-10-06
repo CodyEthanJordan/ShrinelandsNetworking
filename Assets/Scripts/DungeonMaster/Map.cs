@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -111,6 +112,29 @@ namespace Assets.Scripts.DungeonMaster
                                  (diff.z == 0 ? 1 : 0);
             return zeroDimensions >= 2;
 
+        }
+
+        public static Map FromString(string mapString)
+        {
+            var sr = new StringReader(mapString);
+            string first = sr.ReadLine();
+            var size = first.Split(' ').Select(s => int.Parse(s)).ToList();
+            Map m = new Map(size[0], size[1], size[2]);
+
+            for (int k = 0; k < size[2]; k++)
+            {
+                for (int j = size[1]-1; j >= 0; j--)
+                {
+                    string line = sr.ReadLine();
+                    for (int i = 0; i < size[0]; i++)
+                    {
+                        m.Blocks[i][j][k] = Block.FromString(line[i]);
+                    }
+                }
+                string blankLine = sr.ReadLine();
+            }
+
+            return m;
         }
     }
 }

@@ -33,5 +33,26 @@ namespace Assets.Scripts.DungeonMaster
         {
             return new Block("air", false, 1);
         }
+
+        public static Block FromString(char v)
+        {
+            switch(v)
+            {
+                case '#':
+                    return new Block("stone", true, 1);
+                case 'B':
+                    return new Block("bedrock", true, 1);
+                case '.':
+                    return Block.GetDebugAir();
+                case '!':
+                    return new Block("lava", false, 1);
+                case ']':
+                    return new Block("tree", true, 1);
+                case '%':
+                    return new Block("shrubbery", false, 1);
+                default:
+                    return Block.GetDebugAir();
+            }
+        }
     }
 }
