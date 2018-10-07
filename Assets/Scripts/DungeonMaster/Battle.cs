@@ -54,14 +54,14 @@ namespace Assets.Scripts.DungeonMaster
             var unit = units.First(u => u.ID == unitID);
             var targetPos = unit.Position + Map.VectorFromDirection(dir);
             var targetedUnit = units.FirstOrDefault(u => u.Position == targetPos);
-            if(targetedUnit == null)
+            if (targetedUnit == null)
             {
                 return; //no one to attack
             }
 
             var card = Deck.BasicDraw(unit.Expertise.Current, 0, targetedUnit.Stamina.Current, outcome_index);
 
-            switch(card)
+            switch (card)
             {
                 case Deck.CardType.Hit:
                     targetedUnit.HP.Current -= unit.Strength.Current;
@@ -121,9 +121,43 @@ namespace Assets.Scripts.DungeonMaster
             return defaultBattle;
         }
 
+        public List<string> ShowMapByLevel()
+        {
+            var output = new List<string>();
+            StringBuilder sb = new StringBuilder();
+
+            for (int k = 0; k < map.Shape[2]; k++)
+            {
+                for (int j = map.Shape[1] - 1; j >= 0; j--)
+                {
+                    for (int i = 0; i < map.Shape[0]; i++)
+                    {
+                        var unitAt = units.FirstOrDefault(u => u.Position == new Vector3Int(i, j, k));
+                        if (unitAt == null)
+                        {
+                            sb.Append(map.BlockAt(new Vector3Int(i, j, k)).GetChar());
+                        }
+                        else
+                        {
+                            sb.Append(unitAt.Name[0]);
+                        }
+                    }
+                    sb.AppendLine("");
+                }
+                output.Add(sb.ToString());
+                sb = new StringBuilder();
+            }
+
+            return output;
+        }
+
         public List<Result> MakeMove(Guid unitID, Map.Direction direction)
         {
             var unit = units.First(u => u.ID == unitID);
+            if (unit.SideID != currentSide.ID)
+            {
+                return null; //TODO: better message
+            }
             return MoveUnit(unitID, unit.Position + Map.VectorFromDirection(direction));
         }
 
@@ -153,7 +187,7 @@ namespace Assets.Scripts.DungeonMaster
                 results.AddRange(newBlock.ApplyBlockEffects(unit));
 
                 // not standing on anything solid and not swimming
-                if(!map.StandingOn(unit).Solid && !newBlock.Buoyant)
+                if (!map.StandingOn(unit).Solid && !newBlock.Buoyant)
                 {
                     // TODO: fall damage
                     // TODO: falling shouldn't cost movement
@@ -175,7 +209,7 @@ namespace Assets.Scripts.DungeonMaster
 
         internal List<Result> EndTurn(Guid sideID)
         {
-            if(sideID != currentSide.ID)
+            if (sideID != currentSide.ID)
             {
                 //how did we end up here
                 //TODO: logging
@@ -197,12 +231,12 @@ namespace Assets.Scripts.DungeonMaster
             int spellCost = 2;
             var results = new List<Result>();
             // first validate if this is possible
-            if(caster.Stamina.Current < spellCost)
+            if (caster.Stamina.Current < spellCost)
             {
                 return null; //doesn't have suffecient stamina
             }
-            
-            if(!Map.IsRookMove(caster.Position, target))
+
+            if (!Map.IsRookMove(caster.Position, target))
             {
                 return null; //magic missle can only be cast in straight lines
             }

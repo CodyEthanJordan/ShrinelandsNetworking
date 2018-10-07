@@ -39,6 +39,30 @@ namespace ShrinelandsDiscordBot
             return true;
         }
 
+        [Command("map")]
+        public async Task ShowMap(CommandContext ctx, string level)
+        {
+            int levelIndex;
+            if (level == "all")
+            {
+                int i = 0;
+                foreach (var levelString in Program.battle.ShowMapByLevel())
+                {
+                    await ctx.RespondAsync("```z=" + i.ToString() + "\n" + levelString + "```");
+                    i++;
+                }
+            }
+            else if(int.TryParse(level, out levelIndex))
+            {
+                string output = Program.battle.ShowMapByLevel()[levelIndex];
+                await ctx.RespondAsync("```" + output + "```");
+            }
+            else
+            {
+                await ctx.RespondAsync("Either 'map all' or 'map n' for some number n");
+            }
+        }
+
         [Command("view")]
         [Description("Used to get information about specific entity")]
         public async Task View(CommandContext ctx,
@@ -67,10 +91,10 @@ namespace ShrinelandsDiscordBot
         [Command("sides")]
         public async Task Sides(CommandContext ctx)
         {
-            string message = 
+            string message =
                 Program.PlayingAs.Aggregate(
-                    new StringBuilder(), (sb, x) 
-                    => sb.Append(x.Key + " " + x.Value + "\n"),
+                    new StringBuilder(), (sb, x)
+                    => sb.Append(x.Key + " : " + x.Value + "\n"),
                     sb => sb.ToString(0, sb.Length - 1));
             await ctx.RespondAsync(message);
         }
@@ -78,13 +102,13 @@ namespace ShrinelandsDiscordBot
         [Command("playas")]
         public async Task PlayAs(CommandContext ctx, string sideName)
         {
-            if(!Program.PlayingAs.Keys.Contains(sideName))
+            if (!Program.PlayingAs.Keys.Contains(sideName))
             {
                 await ctx.RespondAsync("Not a valid side");
                 return;
             }
 
-            if(Program.PlayingAs[sideName] != null)
+            if (Program.PlayingAs[sideName] != null)
             {
                 await ctx.RespondAsync("Already played by " + Program.PlayingAs[sideName] + " use force to override");
                 return;
