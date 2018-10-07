@@ -74,6 +74,12 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
+        public string GetAreaNear(Guid unitID)
+        {
+            var unit = units.Find(u => u.ID == unitID);
+            throw new NotImplementedException();
+        }
+
         public Dictionary<Vector3Int, Vector3Int> GetValidMovements(Guid unitID)
         {
             Dictionary<Vector3Int, Vector3Int> allowedDestinations = new Dictionary<Vector3Int, Vector3Int>();
@@ -150,6 +156,7 @@ namespace Assets.Scripts.DungeonMaster
                 if(!map.StandingOn(unit).Solid && !newBlock.Buoyant)
                 {
                     // TODO: fall damage
+                    // TODO: falling shouldn't cost movement
                     results.AddRange(MoveUnit(unit.ID, unit.Position + new Vector3Int(0, 0, -1)));
                 }
 
