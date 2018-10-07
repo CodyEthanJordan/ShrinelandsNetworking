@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Assets.Scripts.DungeonMaster;
@@ -14,12 +15,19 @@ namespace ShrinelandsDiscordBot
         public static Battle battle;
         static CommandsNextModule commands;
 
+        public static Dictionary<string, string> PlayingAs = new Dictionary<string, string>();
+
         static void Main(string[] args)
         {
             TextReader tr = new StreamReader(@"Key.txt");
             key = tr.ReadLine();
 
             battle = DebugData.GetFunDebugBattle();
+
+            foreach (var side in battle.sides)
+            {
+                PlayingAs.Add(side.Name, null);
+            }
 
             MainAsync(args).ConfigureAwait(false).GetAwaiter().GetResult();
 

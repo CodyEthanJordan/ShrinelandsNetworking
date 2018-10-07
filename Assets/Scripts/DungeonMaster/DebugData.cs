@@ -14,8 +14,8 @@ namespace Assets.Scripts.DungeonMaster
 
             defaultBattle.map = Map.FromString(DebugData.FunMap);
 
-            defaultBattle.sides.Add(new Side("The Player", "#0000FF"));
-            defaultBattle.sides.Add(new Side("The Foe", "#FF0000"));
+            defaultBattle.sides.Add(new Side("IronHand", "#0000FF"));
+            defaultBattle.sides.Add(new Side("Dunewalkers", "#FF0000"));
 
             defaultBattle.units.Add(Unit.GetDefaultDude("Charlie", defaultBattle.sides[0].ID,
                 new Vector3Int(18, 8, 6)));
