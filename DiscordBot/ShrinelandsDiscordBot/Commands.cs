@@ -16,7 +16,7 @@ namespace ShrinelandsDiscordBot
         [Command("view")]
         [Description("Used to get information about specific entity")]
         public async Task View(CommandContext ctx, 
-            [Description("type of thing to describe [unit,block]")] string type,
+            [Description("type of thing to describe [unit,area]")] string type,
             string name)
         {
             if (type.ToLower() == "unit")
@@ -30,6 +30,11 @@ namespace ShrinelandsDiscordBot
                 {
                     await ctx.RespondAsync("No unit called " + name);
                 }
+            }
+            else if(type.ToLower() == "area")
+            {
+                var unit = Program.battle.units.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
+                var areaAround = Program.battle.GetAreaNear(unit.ID);
             }
         }
 
