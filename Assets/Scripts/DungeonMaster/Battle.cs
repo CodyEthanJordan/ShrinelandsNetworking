@@ -140,16 +140,17 @@ namespace Assets.Scripts.DungeonMaster
                 unit.MoveTo(target, standingOn.MoveCost);
                 var result = new Result(Result.ResultType.Movement, "Move", unit.Name + " moved to " + target,
                     new Effect(unit));
+                results.Add(result);
 
                 //check block effects
                 var newBlock = map.BlockAt(unit.Position);
-                newBlock.ApplyBlockEffects(unit);
+                results.AddRange(newBlock.ApplyBlockEffects(unit));
 
                 // not standing on anything solid and not swimming
                 if(!map.StandingOn(unit).Solid && !newBlock.Buoyant)
                 {
                     // TODO: fall damage
-                    MoveUnit(unit.ID, unit.Position + new Vector3Int(0, 0, -1));
+                    results.AddRange(MoveUnit(unit.ID, unit.Position + new Vector3Int(0, 0, -1)));
                 }
 
                 return results;

@@ -94,6 +94,10 @@ namespace Assets.Scripts.DungeonMaster
             sb.AppendLine(Name);
             sb.AppendLine(Position.ToString());
             sb.AppendLine("HP: " + HP.ToString());
+            sb.AppendLine("Movement: " + Movement.ToString());
+            sb.AppendLine("Stamina: " + Stamina.ToString());
+            sb.AppendLine("Strength: " + Strength.ToString());
+            sb.AppendLine("Expertise: " + Expertise.ToString());
 
             return sb.ToString();
         }

@@ -46,10 +46,6 @@ namespace ShrinelandsDiscordBot
             {
                 if (e.Message.Content.ToLower().StartsWith("ping"))
                     await e.Message.RespondAsync("pong!");
-                else if (e.Message.Content.ToLower() == "map")
-                {
-                    await e.Message.RespondAsync(battle.ShowBattle().Substring(0, 2000));
-                }
             };
 
             await discord.ConnectAsync();

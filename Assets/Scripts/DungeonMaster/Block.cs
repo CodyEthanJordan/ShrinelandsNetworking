@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,12 +80,18 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
-        internal void ApplyBlockEffects(Unit unit)
+        public List<Result> ApplyBlockEffects(Unit unit)
         {
+            List<Result> results = new List<Result>();
             if(Name == "lava")
             {
                 unit.TakeDamage(5);
+                results.Add(new Result(Result.ResultType.GenericUpdate, "damage",
+                    unit.Name + " took 5 damage from lava",
+                    new Effect(unit))); //TODO: effect does not work right, needs copy
             }
+
+            return results;
         }
     }
 }
