@@ -88,16 +88,25 @@ namespace Assets.Scripts.DungeonMaster
             return null; 
         }
 
-        public string ShowInfo()
+        public string ShowInfo(Battle b)
         {
             var sb = new StringBuilder();
-            sb.AppendLine(Name);
+            var side = b.sides.First(s => s.ID == this.SideID);
+            sb.AppendLine(Name + "   (" + side.Name + ")");
             sb.AppendLine(Position.ToString());
             sb.AppendLine("HP: " + HP.ToString());
             sb.AppendLine("Movement: " + Movement.ToString());
             sb.AppendLine("Stamina: " + Stamina.ToString());
             sb.AppendLine("Strength: " + Strength.ToString());
             sb.AppendLine("Expertise: " + Expertise.ToString());
+
+            sb.AppendLine("Standing on " + b.map.StandingOn(this).Name);
+
+            var blockIn = b.map.BlockAt(this.Position);
+            if(blockIn.Name != "air")
+            {
+                sb.AppendLine("Inside " + blockIn.Name);
+            }
 
             return sb.ToString();
         }

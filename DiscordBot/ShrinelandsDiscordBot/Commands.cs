@@ -24,7 +24,7 @@ namespace ShrinelandsDiscordBot
                 var unit = Program.battle.units.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
                 if(unit != null)
                 {
-                    await ctx.RespondAsync(unit.ShowInfo());
+                    await ctx.RespondAsync(unit.ShowInfo(Program.battle));
                 }
                 else
                 {
