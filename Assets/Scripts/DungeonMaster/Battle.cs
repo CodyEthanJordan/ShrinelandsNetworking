@@ -97,6 +97,23 @@ namespace Assets.Scripts.DungeonMaster
             return allowedDestinations;
         }
 
+        public List<Result> UseAbility(string unitName, string abilityName)
+        {
+            var unit = units.FirstOrDefault(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
+            if(unit == null)
+            {
+                return null;
+            }
+
+            var ability = unit.Abilities.FirstOrDefault(a => a.Name.Equals(abilityName, StringComparison.CurrentCultureIgnoreCase));
+            if (ability == null || !ability.CanBeUsed(this, unit))
+            {
+                return null;
+            }
+
+            return ability.UseAbility(this, unit, null);
+        }
+
         public static Battle GetDebugBattle()
         {
             var defaultBattle = new Battle();

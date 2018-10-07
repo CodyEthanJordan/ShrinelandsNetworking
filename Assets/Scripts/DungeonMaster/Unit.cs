@@ -20,6 +20,8 @@ namespace Assets.Scripts.DungeonMaster
         public Stat Strength;
         public Vector3Int Position = new Vector3Int();
 
+        public List<Ability> Abilities;
+
         public event UnitMovedEvent OnUnitMoved;
         public event StatsUpdatedEvent OnStatsChanged;
 
@@ -29,6 +31,7 @@ namespace Assets.Scripts.DungeonMaster
             this.SideID = sideID;
             this.Name = name;
             this.Position = pos;
+            Abilities = new List<Ability>();
         }
 
         public void MoveTo(Vector3Int destination, int movementCost)
@@ -88,6 +91,11 @@ namespace Assets.Scripts.DungeonMaster
             return null; 
         }
 
+        public void StartTurn()
+        {
+            Stamina.Current += 2;
+        }
+
         public string ShowInfo(Battle b)
         {
             var sb = new StringBuilder();
@@ -99,6 +107,13 @@ namespace Assets.Scripts.DungeonMaster
             sb.AppendLine("Stamina: " + Stamina.ToString());
             sb.AppendLine("Strength: " + Strength.ToString());
             sb.AppendLine("Expertise: " + Expertise.ToString());
+
+            sb.Append("Abilities: ");
+            foreach (var ability in Abilities)
+            {
+                sb.Append(ability.Name + ",");
+            }
+            sb.AppendLine("");
 
             sb.AppendLine("Standing on " + b.map.StandingOn(this).Name);
 

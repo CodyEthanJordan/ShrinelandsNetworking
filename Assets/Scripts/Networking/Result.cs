@@ -26,7 +26,9 @@ namespace Assets.Scripts.Networking
         public enum ResultType
         {
             Movement,
-            GenericUpdate
+            GenericUpdate,
+            Other
+                
         }
     }
 

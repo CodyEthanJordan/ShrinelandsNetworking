@@ -13,12 +13,12 @@ namespace Assets.Scripts.DungeonMaster
         public bool Buoyant;
         public int MoveCost;
 
-        Block()
+        public Block()
         {
             //ID = Guid.NewGuid();
         }
 
-        Block(string name, bool solid, int moveCost)
+        public Block(string name, bool solid, int moveCost)
         {
             //this.ID = Guid.NewGuid();
             this.Name = name;
@@ -54,6 +54,10 @@ namespace Assets.Scripts.DungeonMaster
                     return new Block("tree", true, 1);
                 case '%':
                     return new Block("shrubbery", false, 1);
+                case '~':
+                    var slime = new Block("slime", false, 1);
+                    slime.Buoyant = true;
+                    return slime;
                 default:
                     return Block.GetDebugAir();
             }
@@ -75,6 +79,8 @@ namespace Assets.Scripts.DungeonMaster
                     return '%';
                 case "bedrock":
                     return 'B';
+                case "slime":
+                    return '~';
                 default:
                     return '.';
             }

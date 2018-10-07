@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.DungeonMaster.Abilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,10 @@ namespace Assets.Scripts.DungeonMaster
 
             defaultBattle.units.Add(Unit.GetDefaultDude("Charlie", defaultBattle.sides[0].ID,
                 new Vector3Int(18, 8, 6)));
-            defaultBattle.units.Add(Unit.GetDefaultDude("Robby", defaultBattle.sides[0].ID,
-                new Vector3Int(5, 5, 1)));
+            var robby = Unit.GetDefaultDude("Robby", defaultBattle.sides[0].ID,
+                new Vector3Int(5, 5, 1));
+            robby.Abilities.Add(new SlimeSpawn());
+            defaultBattle.units.Add(robby);
 
             defaultBattle.units.Add(Unit.GetDefaultDude("JJ", defaultBattle.sides[1].ID,
                 new Vector3Int(15, 4, 3)));

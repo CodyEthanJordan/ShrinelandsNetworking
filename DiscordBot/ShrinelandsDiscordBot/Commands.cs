@@ -52,7 +52,7 @@ namespace ShrinelandsDiscordBot
                     i++;
                 }
             }
-            else if(int.TryParse(level, out levelIndex))
+            else if (int.TryParse(level, out levelIndex))
             {
                 string output = Program.battle.ShowMapByLevel()[levelIndex];
                 await ctx.RespondAsync("```" + output + "```");
@@ -60,6 +60,22 @@ namespace ShrinelandsDiscordBot
             else
             {
                 await ctx.RespondAsync("Either 'map all' or 'map n' for some number n");
+            }
+        }
+
+        [Command("use")]
+        public async Task UseAbility(CommandContext ctx, string unitName, string abilityName)
+        {
+            if (!await ValidPlayer(ctx, ctx.User.Username))
+            {
+                return;
+            }
+
+            List<Result> results = Program.battle.UseAbility(unitName, abilityName);
+
+            foreach (var result in results)
+            {
+                await ctx.RespondAsync(result.Description);
             }
         }
 
