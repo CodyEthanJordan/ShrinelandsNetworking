@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "4b5e982d57cc2b62d931e6f64d26e26923f7b0c3"
+    "signature": "e3f1ada6e79a58e363a993f95198fc82a3abcd6f"
   },
   "compilationOptions": {},
   "targets": {
@@ -9,7 +9,8 @@
       "ShrinelandsDiscordBot/1.0.0": {
         "dependencies": {
           "Assembly-CSharp": "1.0.0",
-          "DSharpPlus": "3.2.3"
+          "DSharpPlus": "3.2.3",
+          "DSharpPlus.CommandsNext": "3.2.3"
         },
         "runtime": {
           "ShrinelandsDiscordBot.dll": {}
@@ -25,6 +26,17 @@
         },
         "runtime": {
           "lib/netstandard2.0/DSharpPlus.dll": {
+            "assemblyVersion": "3.2.3.0",
+            "fileVersion": "3.2.3.0"
+          }
+        }
+      },
+      "DSharpPlus.CommandsNext/3.2.3": {
+        "dependencies": {
+          "DSharpPlus": "3.2.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/DSharpPlus.CommandsNext.dll": {
             "assemblyVersion": "3.2.3.0",
             "fileVersion": "3.2.3.0"
           }
@@ -1542,6 +1554,13 @@
       "sha512": "sha512-MDhZwYv5N/3xPrIpIx92q5o7JPvxCyDXYJAv6fC+GVdzJfUSL9DAPm55lH1I5wZ+Fv9/05Cq/KPVxM0lfh3rog==",
       "path": "dsharpplus/3.2.3",
       "hashPath": "dsharpplus.3.2.3.nupkg.sha512"
+    },
+    "DSharpPlus.CommandsNext/3.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-58KaSGeefzOl/Bzthmo2yGMr1gy5bvBi2cIVFxWkn+K0LNCOVJ3zN13/uC/daQGOD2phLIRHMkjrW+OO8FJY/w==",
+      "path": "dsharpplus.commandsnext/3.2.3",
+      "hashPath": "dsharpplus.commandsnext.3.2.3.nupkg.sha512"
     },
     "Microsoft.CSharp/4.3.0": {
       "type": "package",

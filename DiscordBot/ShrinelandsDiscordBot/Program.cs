@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Assets.Scripts.DungeonMaster;
 using DSharpPlus;
+using DSharpPlus.CommandsNext;
 
 namespace ShrinelandsDiscordBot
 {
@@ -10,7 +11,8 @@ namespace ShrinelandsDiscordBot
     {
         static DiscordClient discord;
         private static string key;
-        private static Battle battle;
+        public static Battle battle;
+        static CommandsNextModule commands;
 
         static void Main(string[] args)
         {
@@ -33,13 +35,20 @@ namespace ShrinelandsDiscordBot
                 LogLevel = LogLevel.Debug
             });
 
+            commands = discord.UseCommandsNext(new CommandsNextConfiguration
+            {
+                StringPrefix = "!"
+            });
+
+            commands.RegisterCommands<Commands>();
+
             discord.MessageCreated += async e =>
             {
                 if (e.Message.Content.ToLower().StartsWith("ping"))
                     await e.Message.RespondAsync("pong!");
                 else if (e.Message.Content.ToLower() == "map")
                 {
-                    await e.Message.RespondAsync(battle.ShowBattle().Substring(0,100));
+                    await e.Message.RespondAsync(battle.ShowBattle().Substring(0, 2000));
                 }
             };
 

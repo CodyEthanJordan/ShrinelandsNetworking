@@ -87,6 +87,16 @@ namespace Assets.Scripts.DungeonMaster
         {
             return null; 
         }
+
+        public string ShowInfo()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(Name);
+            sb.AppendLine(Position.ToString());
+            sb.AppendLine("HP: " + HP.ToString());
+
+            return sb.ToString();
+        }
     }
 
     public delegate void UnitMovedEvent(object source, Guid ID, Vector3Int oldPos, Vector3Int newPos);
