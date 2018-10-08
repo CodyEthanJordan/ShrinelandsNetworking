@@ -17,5 +17,16 @@ namespace BattleTests
             Vector3Int dir2 = (Vector3Int)Ability.ParseTarget(null, null, "(-1,6,0)");
             Assert.AreEqual(new Vector3Int(-1, 6, 0), dir2);
         }
+
+        [TestMethod]
+        public void TestDraws()
+        {
+            Deck deck = new Deck(5, 5, 0);
+            for (int i = 0; i < 100; i++)
+            {
+                var card = deck.Draw();
+                Assert.IsNotNull(card);
+            }
+        }
     }
 }

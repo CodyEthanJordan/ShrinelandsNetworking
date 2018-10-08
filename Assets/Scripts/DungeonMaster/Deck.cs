@@ -7,6 +7,8 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Deck
     {
+        public static Random rand = new Random();
+
         public List<Card> Cards;
         public Card DrawnCard;
 
@@ -36,7 +38,7 @@ namespace Assets.Scripts.DungeonMaster
             }
             else
             {
-                DrawnCard = Cards[UnityEngine.Random.Range(0, Cards.Count)];
+                DrawnCard = Cards[rand.Next(0, Cards.Count)];
                 return DrawnCard;
             }
         }
