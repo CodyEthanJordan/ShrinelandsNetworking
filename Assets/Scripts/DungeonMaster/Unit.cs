@@ -27,6 +27,8 @@ namespace Assets.Scripts.DungeonMaster
         public event UnitMovedEvent OnUnitMoved;
         public event StatsUpdatedEvent OnStatsChanged;
 
+        public bool IsDead { get { return HP.Current <= 0; } }
+
         public Unit(string name, Guid sideID, Vector3Int pos)
         {
             ID = Guid.NewGuid();

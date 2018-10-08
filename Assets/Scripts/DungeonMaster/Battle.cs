@@ -99,19 +99,39 @@ namespace Assets.Scripts.DungeonMaster
 
         public List<Result> UseAbility(string unitName, string abilityName, string target)
         {
+            var results = new List<Result>();
             var unit = units.FirstOrDefault(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
             if(unit == null)
             {
-                return null; //TODO: output
+                results.Add(new Result(Result.ResultType.InvalidAction, "no unit", "No unit named: " + unitName, null));
+                return results;
             }
 
             var ability = unit.Abilities.FirstOrDefault(a => a.Name.Equals(abilityName, StringComparison.CurrentCultureIgnoreCase));
-            if (ability == null || !ability.CanBeUsed(this, unit))
+            if (ability == null)
             {
-                return null; //TODO: output
+                results.Add(new Result(Result.ResultType.InvalidAction, "no ability", "No ability named: " + abilityName, null));
+                return results;
+            }
+            else if(!ability.CanBeUsed(this, unit))
+            {
+                results.Add(new Result(Result.ResultType.InvalidAction, "no prereq", abilityName + " cannot be used", null));
+                return results;
             }
 
             var targetObject = Ability.ParseTarget(this, unit, target);
+
+            //TODO: have free actions
+            if(unit.HasActed)
+            {
+                results.Add(new Result(Result.ResultType.InvalidAction, "already acted", unit.Name + " has already done something this turn", null));
+                return results;
+            }
+            else if(unit.IsDead)
+            {
+                results.Add(new Result(Result.ResultType.InvalidAction, "dead", unit.Name + " is dead", null));
+                return results;
+            }
 
             return ability.UseAbility(this, unit, targetObject);
         }
@@ -177,6 +197,14 @@ namespace Assets.Scripts.DungeonMaster
             {
                 return null; //TODO: better message
             }
+
+            if (unit.IsDead)
+            {
+                var results = new List<Result>();
+                results.Add(new Result(Result.ResultType.InvalidAction, "dead", unit.Name + " is dead", null));
+                return results;
+            }
+
             return MoveUnit(unitID, unit.Position + Map.VectorFromDirection(direction));
         }
 
