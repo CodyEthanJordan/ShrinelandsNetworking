@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace Assets.Scripts.DungeonMaster
@@ -29,11 +30,20 @@ namespace Assets.Scripts.DungeonMaster
                     return new Vector3Int(-1, 0, 0);
             }
 
+            var regex = new Regex(@"\((-{0,1}\d*?),(-{0,1}\d*?),(-{0,1}\d*?)\)");
+            var r = regex.Match(target);
+            if (r.Groups.Count == 4)
+            {
+                return new Vector3Int(int.Parse(r.Groups[1].Value), int.Parse(r.Groups[2].Value), int.Parse(r.Groups[3].Value));
+            }
+
             var targetUnit = battle.units.FirstOrDefault(u => u.Name.Equals(target, StringComparison.CurrentCultureIgnoreCase));
             if(targetUnit != null)
             {
                 return caster.Position - targetUnit.Position;
             }
+
+            
 
             return null;
         }
