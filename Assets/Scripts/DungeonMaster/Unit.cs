@@ -34,6 +34,7 @@ namespace Assets.Scripts.DungeonMaster
             this.Name = name;
             this.Position = pos;
             Abilities = new List<Ability>();
+            HasActed = false;
         }
 
         public void MoveTo(Vector3Int destination, int movementCost)
@@ -96,6 +97,8 @@ namespace Assets.Scripts.DungeonMaster
         public void StartTurn()
         {
             Stamina.Current += 2;
+            HasActed = false;
+            Movement.Current = Movement.Max;
         }
 
         public string ShowInfo(Battle b)
