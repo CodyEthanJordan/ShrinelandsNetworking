@@ -40,5 +40,16 @@ namespace Assets.Scripts.DungeonMaster
                 return DrawnCard;
             }
         }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            foreach (var card in Cards)
+            {
+                sb.Append(card.ToString() + " ");
+            }
+            sb.AppendLine();
+            return sb.ToString();
+        }
     }
 }

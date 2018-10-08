@@ -31,6 +31,11 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
+        public override string ToString()
+        {
+            return this.GetChar().ToString();
+        }
+
         public enum CardType
         {
             Hit,

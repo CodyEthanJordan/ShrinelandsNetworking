@@ -75,6 +75,11 @@ namespace ShrinelandsDiscordBot
 
             foreach (var result in results)
             {
+                if(result.Type == Result.ResultType.Deck)
+                {
+                    await ctx.RespondAsync(result.OutcomeDeck.ToString());
+                    await ctx.RespondAsync(result.OutcomeDeck.DrawnCard.ToString());
+                }
                 await ctx.RespondAsync(result.Description);
             }
         }
