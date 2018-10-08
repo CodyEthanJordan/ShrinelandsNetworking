@@ -131,7 +131,7 @@ namespace Assets.Scripts.Networking
                     break;
                 case "end turn":
                     var sideId = JsonConvert.DeserializeObject<Guid>(message.JsonContents);
-                    var results = battle.EndTurn(sideId);
+                    var results = battle.EndTurn();
                     TellClientsAboutResult(results);
                     break;
 

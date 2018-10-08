@@ -13,6 +13,19 @@ namespace ShrinelandsDiscordBot
 {
     public class Commands
     {
+        public async Task ShowResults(CommandContext ctx, List<Result> results)
+        {
+            foreach (var result in results)
+            {
+                if (result.Type == Result.ResultType.Deck)
+                {
+                    await ctx.RespondAsync(result.OutcomeDeck.ToString());
+                    await ctx.RespondAsync(result.OutcomeDeck.DrawnCard.ToString());
+                }
+                await ctx.RespondAsync(result.Description);
+            }
+        }
+
         public async Task<bool> ValidPlayer(CommandContext ctx, string name)
         {
             if (!Program.PlayingAs.Values.Contains(name))
@@ -73,15 +86,7 @@ namespace ShrinelandsDiscordBot
 
             List<Result> results = Program.battle.UseAbility(unitName, abilityName, target);
 
-            foreach (var result in results)
-            {
-                if(result.Type == Result.ResultType.Deck)
-                {
-                    await ctx.RespondAsync(result.OutcomeDeck.ToString());
-                    await ctx.RespondAsync(result.OutcomeDeck.DrawnCard.ToString());
-                }
-                await ctx.RespondAsync(result.Description);
-            }
+            await ShowResults(ctx, results);
         }
 
         [Command("view")]
@@ -137,6 +142,18 @@ namespace ShrinelandsDiscordBot
 
             Program.PlayingAs[sideName] = ctx.User.Username;
             await ctx.RespondAsync("Now you are playing as " + sideName);
+        }
+
+        [Command("passturn")]
+        public async Task PassTurn(CommandContext ctx)
+        {
+            if(!await ValidPlayer(ctx, ctx.User.Username))
+            {
+                return;
+            }
+
+            var results = Program.battle.EndTurn();
+            await ShowResults(ctx, results);
         }
 
         [Command("move")]

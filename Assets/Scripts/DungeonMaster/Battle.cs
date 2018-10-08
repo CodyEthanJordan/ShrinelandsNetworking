@@ -226,20 +226,31 @@ namespace Assets.Scripts.DungeonMaster
         //    }
         //}
 
-        internal List<Result> EndTurn(Guid sideID)
+        public List<Result> EndTurn()
         {
-            if (sideID != currentSide.ID)
-            {
-                //how did we end up here
-                //TODO: logging
-                return null;
-            }
+            //if (sideID != currentSide.ID)
+            //{
+            //    //how did we end up here
+            //    //TODO: logging
+            //    return null;
+            //}
 
             List<Result> results = new List<Result>();
 
-            foreach (var unit in units)
+
+            foreach (var unit in units.FindAll(u => u.SideID == currentSide.ID))
             {
-                results.Add(unit.EndTurn());
+                results.AddRange(unit.EndTurn());
+            }
+
+            int i = sides.IndexOf(currentSide);
+            i = (i + 1) % sides.Count;
+
+            currentSide = sides[i];
+
+            foreach (var unit in units.FindAll(u => u.SideID == currentSide.ID))
+            {
+                results.AddRange(unit.StartTurn());
             }
 
             return results;

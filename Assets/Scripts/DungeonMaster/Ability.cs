@@ -40,7 +40,7 @@ namespace Assets.Scripts.DungeonMaster
             var targetUnit = battle.units.FirstOrDefault(u => u.Name.Equals(target, StringComparison.CurrentCultureIgnoreCase));
             if(targetUnit != null)
             {
-                return caster.Position - targetUnit.Position;
+                return targetUnit.Position - caster.Position;
             }
 
             

@@ -89,16 +89,20 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
-        public Result EndTurn()
+        public List<Result> EndTurn()
         {
-            return null; 
+            return new List<Result>(); //TODO: anything happen? 
         }
 
-        public void StartTurn()
+        public List<Result> StartTurn()
         {
             Stamina.Current += 2;
             HasActed = false;
             Movement.Current = Movement.Max;
+
+            var results = new List<Result>();
+            results.Add(new Result(Result.ResultType.Generic, "new turn", this.Name + " is ready for battle!", null));
+            return results;
         }
 
         public string ShowInfo(Battle b)
