@@ -64,14 +64,14 @@ namespace ShrinelandsDiscordBot
         }
 
         [Command("use")]
-        public async Task UseAbility(CommandContext ctx, string unitName, string abilityName)
+        public async Task UseAbility(CommandContext ctx, string unitName, string abilityName, string target)
         {
             if (!await ValidPlayer(ctx, ctx.User.Username))
             {
                 return;
             }
 
-            List<Result> results = Program.battle.UseAbility(unitName, abilityName);
+            List<Result> results = Program.battle.UseAbility(unitName, abilityName, target);
 
             foreach (var result in results)
             {

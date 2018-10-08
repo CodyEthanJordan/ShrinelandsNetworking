@@ -66,10 +66,12 @@
     <Compile Include="Assets\Scripts\Controllers\FSM\GameStateBehaviour.cs" />
     <Compile Include="Assets\Scripts\Controllers\FSM\UninitializedStateBehaviour.cs" />
     <Compile Include="Assets\Scripts\Controllers\FSM\UnitSelectedStateBehaviour.cs" />
+    <Compile Include="Assets\Scripts\DungeonMaster\Abilities\Attack.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Abilities\SlimeSpawn.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Ability.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Battle.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Block.cs" />
+    <Compile Include="Assets\Scripts\DungeonMaster\Card.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\DebugData.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Deck.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Map.cs" />

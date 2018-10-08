@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.Scripts.DungeonMaster.Abilities;
 using Assets.Scripts.Networking;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Assets.Scripts.DungeonMaster
         public Stat Expertise;
         public Stat Strength;
         public Vector3Int Position = new Vector3Int();
+        public bool HasActed;
 
         public List<Ability> Abilities;
 
@@ -57,7 +59,7 @@ namespace Assets.Scripts.DungeonMaster
             dude.Stamina = new Stat(5, 5);
             dude.Expertise = new Stat(4, 4);
             dude.Strength = new Stat(4, 4);
-
+            dude.Abilities.Add(new Attack());
             return dude;
         }
 

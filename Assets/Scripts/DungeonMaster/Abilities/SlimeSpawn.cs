@@ -48,7 +48,7 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                 }
             }
             List<Result> results = new List<Result>();
-            results.Add(new Result(Result.ResultType.Other, "slimespawn",
+            results.Add(new Result(Result.ResultType.Generic, "slimespawn",
                 "Spawned " + spawned.ToString() + " slime", null));
 
             return results;

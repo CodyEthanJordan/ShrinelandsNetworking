@@ -33,7 +33,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public static Block GetDebugAir()
         {
-            return new Block("air", false, 1);
+            return new Block("air", false, 0);
         }
 
         public static Block FromString(char v)
@@ -92,9 +92,9 @@ namespace Assets.Scripts.DungeonMaster
             if(Name == "lava")
             {
                 unit.TakeDamage(5);
-                results.Add(new Result(Result.ResultType.GenericUpdate, "damage",
+                results.Add(new Result(Result.ResultType.Generic, "damage",
                     unit.Name + " took 5 damage from lava",
-                    new Effect(unit))); //TODO: effect does not work right, needs copy
+                    new Update(unit))); //TODO: effect does not work right, needs copy
             }
 
             return results;

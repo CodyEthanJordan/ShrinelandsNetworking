@@ -7,37 +7,38 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class Deck
     {
+        public List<Card> Cards;
+        public Card DrawnCard;
 
-        public static CardType BasicDraw(int hits, int armors, int dodges, int? fated_outcome)
+        public Deck(int hits, int armors, int dodges)
         {
-            var cards = new List<CardType>();
+            Cards = new List<Card>();
             for (int i = 0; i < hits; i++)
             {
-                cards.Add(CardType.Hit);
+                Cards.Add(new Card(Card.CardType.Hit, "you hit"));
             }
             for (int i = 0; i < armors; i++)
             {
-                cards.Add(CardType.Armor);
+                Cards.Add(new Card(Card.CardType.Armor, "armor reduces damage"));
             }
             for (int i = 0; i < dodges; i++)
             {
-                cards.Add(CardType.Dodge);
-            }
-
-            if(fated_outcome.HasValue)
-            {
-                return cards[fated_outcome.Value];
-            }
-            else
-            {
-                int i = UnityEngine.Random.Range(0, cards.Count);
-                return cards[i];
+                Cards.Add(new Card(Card.CardType.Miss, "miss"));
             }
         }
 
-        public enum CardType
+        public Card Draw(int? fated_outcome = null)
         {
-            Hit, Armor, Dodge
+            if(fated_outcome.HasValue)
+            {
+                DrawnCard = Cards[fated_outcome.Value];
+                return DrawnCard;
+            }
+            else
+            {
+                DrawnCard = Cards[UnityEngine.Random.Range(0, Cards.Count)];
+                return DrawnCard;
+            }
         }
     }
 }

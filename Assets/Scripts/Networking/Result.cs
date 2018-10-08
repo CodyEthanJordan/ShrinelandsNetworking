@@ -12,32 +12,34 @@ namespace Assets.Scripts.Networking
         public ResultType Type;
         public string Title;
         public string Description;
-        public List<Effect> Effects;
+        public List<Update> Effects;
+        public Deck OutcomeDeck;
 
-        public Result(ResultType type, string title, string description, Effect effect)
+
+        public Result(ResultType type, string title, string description, Update effect)
         {
             this.Type = type;
             this.Title = title;
             this.Description = description;
-            Effects = new List<Effect>();
+            Effects = new List<Update>();
             Effects.Add(effect);
         }
 
         public enum ResultType
         {
-            Movement,
-            GenericUpdate,
-            Other
+            Generic,
+            Deck,
+            InvalidAction,
                 
         }
     }
 
-    public class Effect
+    public class Update
     {
         // TODO: deck
         public Unit NewStatus;
 
-        public Effect(Unit newStatus)
+        public Update(Unit newStatus)
         {
             this.NewStatus = newStatus;
         }

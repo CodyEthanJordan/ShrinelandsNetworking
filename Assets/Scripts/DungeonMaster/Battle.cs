@@ -48,31 +48,31 @@ namespace Assets.Scripts.DungeonMaster
             return Map.CardinalDirections.Contains(diff);
         }
 
-        public void BasicAttack(Guid unitID, Map.Direction dir, int? outcome_index = null)
-        {
-            //TODO: add results?
-            var unit = units.First(u => u.ID == unitID);
-            var targetPos = unit.Position + Map.VectorFromDirection(dir);
-            var targetedUnit = units.FirstOrDefault(u => u.Position == targetPos);
-            if (targetedUnit == null)
-            {
-                return; //no one to attack
-            }
+        //public void BasicAttack(Guid unitID, Map.Direction dir, int? outcome_index = null)
+        //{
+        //    //TODO: add results?
+        //    var unit = units.First(u => u.ID == unitID);
+        //    var targetPos = unit.Position + Map.VectorFromDirection(dir);
+        //    var targetedUnit = units.FirstOrDefault(u => u.Position == targetPos);
+        //    if (targetedUnit == null)
+        //    {
+        //        return; //no one to attack
+        //    }
 
-            var card = Deck.BasicDraw(unit.Expertise.Current, 0, targetedUnit.Stamina.Current, outcome_index);
+        //    var card = Deck.BasicDraw(unit.Expertise.Current, 0, targetedUnit.Stamina.Current, outcome_index);
 
-            switch (card)
-            {
-                case Deck.CardType.Hit:
-                    targetedUnit.HP.Current -= unit.Strength.Current;
-                    break;
-                case Deck.CardType.Armor:
-                    throw new NotImplementedException();
-                    break;
-                case Deck.CardType.Dodge:
-                    break;
-            }
-        }
+        //    switch (card)
+        //    {
+        //        case Deck.CardType.Hit:
+        //            targetedUnit.HP.Current -= unit.Strength.Current;
+        //            break;
+        //        case Deck.CardType.Armor:
+        //            throw new NotImplementedException();
+        //            break;
+        //        case Deck.CardType.Dodge:
+        //            break;
+        //    }
+        //}
 
         public string GetAreaNear(Guid unitID)
         {
@@ -97,21 +97,23 @@ namespace Assets.Scripts.DungeonMaster
             return allowedDestinations;
         }
 
-        public List<Result> UseAbility(string unitName, string abilityName)
+        public List<Result> UseAbility(string unitName, string abilityName, string target)
         {
             var unit = units.FirstOrDefault(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
             if(unit == null)
             {
-                return null;
+                return null; //TODO: output
             }
 
             var ability = unit.Abilities.FirstOrDefault(a => a.Name.Equals(abilityName, StringComparison.CurrentCultureIgnoreCase));
             if (ability == null || !ability.CanBeUsed(this, unit))
             {
-                return null;
+                return null; //TODO: output
             }
 
-            return ability.UseAbility(this, unit, null);
+            var targetObject = Ability.ParseTarget(this, unit, target);
+
+            return ability.UseAbility(this, unit, targetObject);
         }
 
         public static Battle GetDebugBattle()
@@ -195,8 +197,8 @@ namespace Assets.Scripts.DungeonMaster
             else
             {
                 unit.MoveTo(target, standingOn.MoveCost);
-                var result = new Result(Result.ResultType.Movement, "Move", unit.Name + " moved to " + target,
-                    new Effect(unit));
+                var result = new Result(Result.ResultType.Generic, "Move", unit.Name + " moved to " + target,
+                    new Update(unit));
                 results.Add(result);
 
                 //check block effects
@@ -215,14 +217,14 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
-        public void HandleResult(Result result)
-        {
-            switch (result.Type)
-            {
-                case Result.ResultType.Movement:
-                    break;
-            }
-        }
+        //public void HandleResult(Result result)
+        //{
+        //    switch (result.Type)
+        //    {
+        //        case Result.ResultType.Movement:
+        //            break;
+        //    }
+        //}
 
         internal List<Result> EndTurn(Guid sideID)
         {
@@ -278,7 +280,7 @@ namespace Assets.Scripts.DungeonMaster
         {
             foreach (var result in results)
             {
-                HandleResult(result);
+                //HandleResult(result);
             }
         }
     }
