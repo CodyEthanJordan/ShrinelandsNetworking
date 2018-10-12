@@ -22,6 +22,7 @@ namespace Assets.Scripts.DungeonMaster
         public Vector3Int Position = new Vector3Int();
         public bool HasActed;
         public bool SlimeImmune;
+        public bool HalfMove;
 
         public List<Ability> Abilities;
 
@@ -38,10 +39,30 @@ namespace Assets.Scripts.DungeonMaster
             this.Position = pos;
             Abilities = new List<Ability>();
             HasActed = false;
+            HalfMove = false;
         }
 
-        public void MoveTo(Vector3Int destination, int movementCost)
+        public void MoveTo(Battle b, Vector3Int destination, int movementCost)
         {
+            if(!b.IsPassable(destination))
+            {
+                return;
+            }
+
+            var blockIn = b.map.BlockAt(this.Position);
+            if(blockIn.Name == "slime" && SlimeImmune)
+            {
+                if(HalfMove)
+                {
+                    HalfMove = false;
+                }
+                else
+                {
+                    HalfMove = true;
+                    movementCost = movementCost - 1;
+                }
+            }
+
             if (movementCost > this.Movement.Current)
             {
                 return;
@@ -157,7 +178,7 @@ namespace Assets.Scripts.DungeonMaster
                 var blockAbove = b.map.BlockAt(this.Position + new Vector3Int(0, 0, 1));
                 if (blockIn.Flugen && blockAbove.Flugen)
                 {
-                    MoveTo(this.Position + new Vector3Int(0, 0, 1), 1);
+                    MoveTo(b, this.Position + new Vector3Int(0, 0, 1), 1);
                     return results;
                 }
             }
@@ -177,13 +198,13 @@ namespace Assets.Scripts.DungeonMaster
                     }
                     else
                     {
-                        MoveTo(this.Position + Map.VectorFromDirection(direction) +
+                        MoveTo(b, this.Position + Map.VectorFromDirection(direction) +
                         new Vector3Int(0, 0, 1), blockOn.MoveCost + 1);
                         return results;
                     }
                 }
 
-                MoveTo(this.Position + Map.VectorFromDirection(direction), blockOn.MoveCost);
+                MoveTo(b, this.Position + Map.VectorFromDirection(direction), blockOn.MoveCost);
                 //check for falling
                 var newBlockOn = b.map.BlockAt(this.Position + new Vector3Int(0, 0, -1));
                 if (!newBlockOn.Solid)

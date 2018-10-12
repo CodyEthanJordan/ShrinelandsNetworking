@@ -62,15 +62,18 @@ namespace Assets.Scripts.DungeonMaster
             return debugMap;
         }
 
-        internal static List<Vector3Int> GetAdjacent(Vector3Int hitPos)
+        internal static List<Vector3Int> GetAdjacent(Vector3Int hitPos, bool cardinalOnly = true)
         {
             var adjacent = new List<Vector3Int>();
             foreach (var dir in CardinalDirections)
             {
                 adjacent.Add(hitPos + dir);
             }
-            adjacent.Add(hitPos + new Vector3Int(0, 0, 1));
-            adjacent.Add(hitPos + new Vector3Int(0, 0, -1));
+            if (!cardinalOnly)
+            {
+                adjacent.Add(hitPos + new Vector3Int(0, 0, 1));
+                adjacent.Add(hitPos + new Vector3Int(0, 0, -1));
+            }
             return adjacent;
         }
 
@@ -188,7 +191,7 @@ namespace Assets.Scripts.DungeonMaster
                 {
                     for (int i = 0; i < this.Shape[0]; i++)
                     {
-                        if(position == new Vector3Int(i,j,k))
+                        if (position == new Vector3Int(i, j, k))
                         {
                             return sb.Length;
                         }

@@ -226,7 +226,7 @@ namespace Assets.Scripts.DungeonMaster
             }
             else
             {
-                unit.MoveTo(target, standingOn.MoveCost);
+                unit.MoveTo(this, target, standingOn.MoveCost);
                 var result = new Result(Result.ResultType.Generic, "Move", unit.Name + " moved to " + target,
                     new Update(unit));
                 results.Add(result);

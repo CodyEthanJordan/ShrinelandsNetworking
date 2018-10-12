@@ -34,17 +34,22 @@ namespace Assets.Scripts.DungeonMaster.Abilities
             {
                 for (int j = -1; j <= 1; j++)
                 {
-                    var pos = caster.Position + new UnityEngine.Vector3Int(i, j, 0);
-                    var block = battle.map.BlockAt(pos);
-                    if (block.Name == "air")
+                    for (int k = 0; k <= 1; k++)
                     {
-                        Block slime = new Block("slime", false, 1)
+
+
+                        var pos = caster.Position + new UnityEngine.Vector3Int(i, j, k);
+                        var block = battle.map.BlockAt(pos);
+                        if (block.Name == "air")
                         {
-                            Flugen = true,
-                            Conductive = true,
-                        };
-                        battle.map.Blocks[pos.x][pos.y][pos.z] = slime;
-                        spawned++;
+                            Block slime = new Block("slime", false, 1)
+                            {
+                                Flugen = true,
+                                Conductive = true,
+                            };
+                            battle.map.Blocks[pos.x][pos.y][pos.z] = slime;
+                            spawned++;
+                        }
                     }
                 }
             }

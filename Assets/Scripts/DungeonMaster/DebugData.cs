@@ -21,18 +21,22 @@ namespace Assets.Scripts.DungeonMaster
             var robby = Unit.GetDefaultDude("Robby", b.sides[0].ID,
                 new Vector3Int(4, 1, 3));
             robby.Abilities.Add(new SlimeSpawn());
+            robby.SlimeImmune = true;
             b.units.Add(robby);
             var charlie = Unit.GetDefaultDude("Charlie", b.sides[0].ID,
                 new Vector3Int(5, 1, 3));
             charlie.Abilities.Add(new SlimeSpawn());
+            charlie.SlimeImmune = true;
             b.units.Add(charlie);
             var gilbert = Unit.GetDefaultDude("Gilbert", b.sides[0].ID,
                 new Vector3Int(6, 1, 3));
             gilbert.Abilities.Add(new SlimeSpawn());
+            gilbert.SlimeImmune = true;
             b.units.Add(gilbert);
             var moe = Unit.GetDefaultDude("Moe", b.sides[0].ID,
                 new Vector3Int(7, 1, 3));
             moe.Abilities.Add(new SlimeSpawn());
+            moe.SlimeImmune = true;
             b.units.Add(moe);
 
             var zach = Unit.GetDefaultDude("Zach", b.sides[1].ID,

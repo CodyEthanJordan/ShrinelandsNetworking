@@ -59,8 +59,11 @@ namespace BattleTests
             robby.Position = new UnityEngine.Vector3Int(3, 5, robby.Position.z);
             b.UseAbility("Robby", "slimespawn", "none");
             var results = b.UseAbility("Zach", "lightning", "n", 0);
-            Assert.IsTrue(robby.HP.Current < robby.HP.Max);
             Assert.IsTrue(b.map.BlockAt(new UnityEngine.Vector3Int(3, 4, robby.Position.z)).Name == "air");
+            Assert.IsTrue(b.map.BlockAt(new UnityEngine.Vector3Int(3, 4, robby.Position.z+1)).Name == "air");
+            Assert.IsTrue(b.map.BlockAt(new UnityEngine.Vector3Int(3, 5, robby.Position.z)).Name == "air");
+            Assert.IsTrue(b.map.BlockAt(new UnityEngine.Vector3Int(3, 5, robby.Position.z+1)).Name == "air");
+            Assert.IsTrue(robby.HP.Current < robby.HP.Max);
         }
     }
 }

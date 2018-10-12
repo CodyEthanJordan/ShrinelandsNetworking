@@ -17,7 +17,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public Stat(int current, int max)
         {
-            this.Current = current;
+            this._current = current;
             this.Max = max;
         }
 

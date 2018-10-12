@@ -42,46 +42,47 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                 Vector3Int hitPos = new Vector3Int(targetPos.x, targetPos.y, i);
                 hitBlock = battle.map.BlockAt(hitPos);
 
-
                 if (hitBlock.Conductive)
                 {
                     List<Vector3Int> adjacent = Map.GetAdjacent(hitPos);
                     foreach (var adj in adjacent)
                     {
                         var secondaryBlock = battle.map.BlockAt(adj);
-                        results.AddRange(secondaryBlock.StruckByLightning());
-                        var secondaryUnit = battle.units.FirstOrDefault(u => u.Position == adj);
-                        if (secondaryUnit != null)
+                        if (secondaryBlock.Conductive)
                         {
-                            Deck outcome = new Deck();
-
-                            Card struck = new Card(Card.CardType.Hit, secondaryUnit.Name + " struck by lightning");
-                            outcome.AddCards(struck, secondaryUnit.Position.z);
-
-                            Card dodge = new Card(Card.CardType.Miss, secondaryUnit.Name + " dodges the lightning");
-                            outcome.AddCards(dodge, secondaryUnit.Stamina.Current);
-
-                            var drawn = outcome.Draw(fated_outcome);
-                            switch (drawn.Type)
+                            results.AddRange(secondaryBlock.StruckByLightning());
+                            var secondaryUnit = battle.units.FirstOrDefault(u => u.Position == adj);
+                            if (secondaryUnit != null)
                             {
-                                case Card.CardType.Hit:
-                                    Result hitResult = new Result(Result.ResultType.Deck, "hit", drawn.Description, null);
-                                    hitResult.OutcomeDeck = outcome;
-                                    secondaryUnit.TakeDamage(3);
-                                    results.Add(hitResult);
-                                    break;
-                                case Card.CardType.Armor:
-                                    break;
-                                case Card.CardType.Miss:
-                                    Result missResult = new Result(Result.ResultType.Deck, "miss", drawn.Description, null);
-                                    missResult.OutcomeDeck = outcome;
-                                    results.Add(missResult);
-                                    break;
-                                default:
-                                    break;
+                                Deck outcome = new Deck();
+
+                                Card struck = new Card(Card.CardType.Hit, secondaryUnit.Name + " struck by lightning");
+                                outcome.AddCards(struck, secondaryUnit.Position.z);
+
+                                Card dodge = new Card(Card.CardType.Miss, secondaryUnit.Name + " dodges the lightning");
+                                outcome.AddCards(dodge, secondaryUnit.Stamina.Current);
+
+                                var drawn = outcome.Draw(fated_outcome);
+                                switch (drawn.Type)
+                                {
+                                    case Card.CardType.Hit:
+                                        Result hitResult = new Result(Result.ResultType.Deck, "hit", drawn.Description, null);
+                                        hitResult.OutcomeDeck = outcome;
+                                        secondaryUnit.TakeDamage(3);
+                                        results.Add(hitResult);
+                                        break;
+                                    case Card.CardType.Armor:
+                                        break;
+                                    case Card.CardType.Miss:
+                                        Result missResult = new Result(Result.ResultType.Deck, "miss", drawn.Description, null);
+                                        missResult.OutcomeDeck = outcome;
+                                        results.Add(missResult);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
-
                     }
 
                 }

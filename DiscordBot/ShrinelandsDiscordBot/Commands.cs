@@ -167,7 +167,7 @@ namespace ShrinelandsDiscordBot
             {
                 return;
             }
-            var validDirections = new List<string>() { "n", "s", "e", "w" };
+            var validDirections = new List<string>() { "n", "s", "e", "w", "u", "d"};
             var unit = Program.battle.units.FirstOrDefault(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
             if (unit == null)
             {
@@ -194,6 +194,12 @@ namespace ShrinelandsDiscordBot
                     break;
                 case "w":
                     results = Program.battle.MakeMove(unit.ID, Map.Direction.West);
+                    break;
+                case "u":
+                    results = Program.battle.MakeMove(unit.ID, Map.Direction.Up);
+                    break;
+                case "d":
+                    results = Program.battle.MakeMove(unit.ID, Map.Direction.Down);
                     break;
             }
 
