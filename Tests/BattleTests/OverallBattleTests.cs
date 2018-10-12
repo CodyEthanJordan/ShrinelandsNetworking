@@ -31,6 +31,7 @@ namespace BattleTests
         {
             Battle b = DebugData.GetFunDebugBattle();
             Unit zach = b.units.First(u => u.Name == "Zach");
+            b.currentSide = b.sides.First(s => s.ID == zach.SideID);
             Assert.AreEqual("stone", b.map.StandingOn(zach).Name);
             Assert.IsTrue(zach.HP.Current == zach.HP.Max);
             b.MakeMove(zach.ID, Map.Direction.South);

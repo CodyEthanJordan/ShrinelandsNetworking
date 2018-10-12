@@ -207,7 +207,8 @@ namespace Assets.Scripts.DungeonMaster
                 MoveTo(b, this.Position + Map.VectorFromDirection(direction), blockOn.MoveCost);
                 //check for falling
                 var newBlockOn = b.map.BlockAt(this.Position + new Vector3Int(0, 0, -1));
-                if (!newBlockOn.Solid)
+                var newBlockIn = b.map.BlockAt(this.Position);
+                if (!newBlockOn.Solid && !newBlockIn.Flugen)
                 {
                     results.AddRange(Fall(b, 0));
                 }
@@ -222,7 +223,8 @@ namespace Assets.Scripts.DungeonMaster
             var results = new List<Result>();
             this.Position = this.Position + new Vector3Int(0, 0, -1);
             var newBlockOn = b.map.BlockAt(this.Position + new Vector3Int(0, 0, -1));
-            if (!newBlockOn.Solid)
+            var newBlockIn = b.map.BlockAt(this.Position);
+            if (!newBlockOn.Solid && !newBlockIn.Flugen)
             {
                 results.AddRange(Fall(b, fallen+1));
                 return results;
