@@ -207,7 +207,7 @@ namespace Assets.Scripts.DungeonMaster
                 return results;
             }
 
-            return MoveUnit(unitID, unit.Position + Map.VectorFromDirection(direction));
+            return unit.MoveDirection(this, direction);
         }
 
         public List<Result> MoveUnit(Guid unitID, Vector3Int target)

@@ -42,6 +42,10 @@ namespace Assets.Scripts.DungeonMaster
 
         public void MoveTo(Vector3Int destination, int movementCost)
         {
+            if(movementCost > this.Movement.Current)
+            {
+                return;
+            }
             Vector3Int oldPos = Position;
             Position = destination;
             Movement.Current -= movementCost;
@@ -141,6 +145,48 @@ namespace Assets.Scripts.DungeonMaster
             }
 
             return sb.ToString();
+        }
+
+        internal List<Result> MoveDirection(Battle b, Map.Direction direction)
+        {
+            var results = new List<Result>();
+            if(direction == Map.Direction.Up) //only swimming
+            {
+                var blockIn = b.map.BlockAt(this.Position);
+                var blockAbove = b.map.BlockAt(this.Position + new Vector3Int(0, 0, 1));
+                if(blockIn.Flugen && blockAbove.Flugen)
+                {
+                    MoveTo(this.Position + new Vector3Int(0, 0, 1), 1);
+                    return results;
+                }
+            }
+            else
+            {
+                var blockIn = b.map.BlockAt(this.Position);
+                var blockOn = b.map.StandingOn(this);
+                var destinationBlock = b.map.BlockAt(this.Position + Map.VectorFromDirection(direction));
+                if(destinationBlock.Solid)
+                {
+                    //check for climbing
+                    var blockAbove = b.map.BlockAt(this.Position + Map.VectorFromDirection(direction) +
+                        new Vector3Int(0, 0, 1));
+                    if(blockAbove.Solid)
+                    {
+                        results.Add(new Result(Result.ResultType.InvalidAction, "blocked", "cannot move there", null));
+                    }
+                    else
+                    {
+                        MoveTo(this.Position + Map.VectorFromDirection(direction) +
+                        new Vector3Int(0, 0, 1), blockOn.MoveCost + 1);
+                        return results;
+                    }
+                }
+
+                MoveTo(this.Position + Map.VectorFromDirection(direction), blockOn.MoveCost);
+                return results;
+            }
+
+            throw new NotImplementedException();
         }
     }
 

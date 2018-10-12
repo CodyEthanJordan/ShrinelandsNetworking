@@ -22,7 +22,7 @@ namespace ShrinelandsDiscordBot
             TextReader tr = new StreamReader(@"Key.txt");
             key = tr.ReadLine();
 
-            battle = DebugData.GetFunDebugBattle();
+            battle = DebugData.ZachRobbySkirmish();
 
             foreach (var side in battle.sides)
             {
