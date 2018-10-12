@@ -21,6 +21,7 @@ namespace Assets.Scripts.DungeonMaster
         public Stat Strength;
         public Vector3Int Position = new Vector3Int();
         public bool HasActed;
+        public bool SlimeImmune;
 
         public List<Ability> Abilities;
 

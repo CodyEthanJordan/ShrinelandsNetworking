@@ -9,6 +9,30 @@ namespace Assets.Scripts.DungeonMaster
 {
     public class DebugData
     {
+        public static Battle ZachRobbySkirmish()
+        {
+            var b = new Battle();
+            string mapText = System.IO.File.ReadAllText(@"ZachRobby.txt");
+            b.map = Map.FromString(mapText);
+
+            b.sides.Add(new Side("IronHand", "#0000FF"));
+            b.sides.Add(new Side("Dunewalkers", "#FF0000"));
+
+            var robby = Unit.GetDefaultDude("Robby", b.sides[0].ID,
+                new Vector3Int(5, 5, 3));
+            robby.Abilities.Add(new SlimeSpawn());
+            b.units.Add(robby);
+
+            var zach = Unit.GetDefaultDude("Zach", b.sides[1].ID,
+                new Vector3Int(5, 6, 3));
+            zach.Abilities.Add(new Lightning());
+            b.units.Add(zach);
+
+            b.currentSide = b.sides[0];
+
+            return b;
+        }
+
         public static Battle GetFunDebugBattle()
         {
             var defaultBattle = new Battle();

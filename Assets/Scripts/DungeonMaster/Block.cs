@@ -128,9 +128,16 @@ namespace Assets.Scripts.DungeonMaster
             return results;
         }
 
-        internal IEnumerable<Result> ApplyStartTurnEffects(Battle b, Unit unit)
+        internal List<Result> ApplyStartTurnEffects(Battle b, Unit unit)
         {
-            throw new NotImplementedException();
+            var results = new List<Result>();
+            if(Name == "slime" && !unit.SlimeImmune)
+            {
+                unit.TakeDamage(1);
+                results.Add(new Result(Result.ResultType.Generic, "slime", unit.Name + " took 1 damage from slime", null));
+            }
+
+            return results;
         }
     }
 }
