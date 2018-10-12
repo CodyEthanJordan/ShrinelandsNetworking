@@ -96,7 +96,7 @@ namespace Assets.Scripts.DungeonMaster
             return new List<Result>(); //TODO: anything happen? 
         }
 
-        public List<Result> StartTurn()
+        public List<Result> StartTurn(Battle b)
         {
             Stamina.Current += 2;
             HasActed = false;
@@ -104,6 +104,11 @@ namespace Assets.Scripts.DungeonMaster
 
             var results = new List<Result>();
             results.Add(new Result(Result.ResultType.Generic, "new turn", this.Name + " is ready for battle!", null));
+
+            //TODO: make block delegate?
+            var blockIn = b.map.BlockAt(this.Position);
+            results.AddRange(blockIn.ApplyStartTurnEffects(b, this));
+
             return results;
         }
 

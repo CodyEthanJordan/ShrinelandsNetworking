@@ -36,7 +36,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public Card Draw(int? fated_outcome = null)
         {
-            if(fated_outcome.HasValue)
+            if (fated_outcome.HasValue)
             {
                 DrawnCard = Cards[fated_outcome.Value];
                 return DrawnCard;
@@ -57,6 +57,14 @@ namespace Assets.Scripts.DungeonMaster
             }
             sb.AppendLine();
             return sb.ToString();
+        }
+
+        internal void AddCards(Card card, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Cards.Add(card);
+            }
         }
     }
 }

@@ -62,6 +62,18 @@ namespace Assets.Scripts.DungeonMaster
             return debugMap;
         }
 
+        internal static List<Vector3Int> GetAdjacent(Vector3Int hitPos)
+        {
+            var adjacent = new List<Vector3Int>();
+            foreach (var dir in CardinalDirections)
+            {
+                adjacent.Add(hitPos + dir);
+            }
+            adjacent.Add(hitPos + new Vector3Int(0, 0, 1));
+            adjacent.Add(hitPos + new Vector3Int(0, 0, -1));
+            return adjacent;
+        }
+
         public enum Direction
         {
             North, South, East, West, Up, Down

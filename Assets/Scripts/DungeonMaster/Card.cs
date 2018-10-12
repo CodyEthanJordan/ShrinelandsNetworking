@@ -43,10 +43,5 @@ namespace Assets.Scripts.DungeonMaster
             Armor,
             Miss
         }
-
-        internal void DoThing(Func<Battle, Unit, Unit, List<Result>> p)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -236,7 +236,7 @@ namespace Assets.Scripts.DungeonMaster
                 results.AddRange(newBlock.ApplyBlockEffects(unit));
 
                 // not standing on anything solid and not swimming
-                if (!map.StandingOn(unit).Solid && !newBlock.Buoyant)
+                if (!map.StandingOn(unit).Solid && !newBlock.Flugen)
                 {
                     // TODO: fall damage
                     // TODO: falling shouldn't cost movement
@@ -280,7 +280,7 @@ namespace Assets.Scripts.DungeonMaster
 
             foreach (var unit in units.FindAll(u => u.SideID == currentSide.ID))
             {
-                results.AddRange(unit.StartTurn());
+                results.AddRange(unit.StartTurn(this));
             }
 
             return results;

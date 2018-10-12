@@ -40,7 +40,8 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                     {
                         Block slime = new Block("slime", false, 1)
                         {
-                            Buoyant = true
+                            Flugen = true,
+                            Conductive = true,
                         };
                         battle.map.Blocks[pos.x][pos.y][pos.z] = slime;
                         spawned++;
