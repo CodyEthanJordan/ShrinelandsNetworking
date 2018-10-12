@@ -97,7 +97,9 @@ namespace Assets.Scripts.DungeonMaster
             return allowedDestinations;
         }
 
-        public List<Result> UseAbility(string unitName, string abilityName, string target)
+
+
+        public List<Result> UseAbility(string unitName, string abilityName, string target, int? fated_outcome=null)
         {
             var results = new List<Result>();
             var unit = units.FirstOrDefault(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
@@ -133,7 +135,7 @@ namespace Assets.Scripts.DungeonMaster
                 return results;
             }
 
-            return ability.UseAbility(this, unit, targetObject);
+            return ability.UseAbility(this, unit, targetObject, fated_outcome);
         }
 
         public static Battle GetDebugBattle()

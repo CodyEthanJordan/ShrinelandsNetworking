@@ -26,7 +26,7 @@ namespace Assets.Scripts.DungeonMaster.Abilities
             }
         }
 
-        public override List<Result> UseAbility(Battle battle, Unit caster, object targetInfo)
+        public override List<Result> UseAbility(Battle battle, Unit caster, object targetInfo, int? fated_outcome=null)
         {
             caster.Stamina.Current -= 4;
             int spawned = 0;

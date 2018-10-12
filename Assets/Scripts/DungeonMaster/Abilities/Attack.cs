@@ -20,7 +20,7 @@ namespace Assets.Scripts.DungeonMaster.Abilities
             return caster.Stamina.Current > 0 && !caster.HasActed;
         }
 
-        public override List<Result> UseAbility(Battle battle, Unit caster, object targetInfo)
+        public override List<Result> UseAbility(Battle battle, Unit caster, object targetInfo, int? fated_outcome=null)
         {
             Vector3Int dir = (Vector3Int)targetInfo;
             var results = new List<Result>();

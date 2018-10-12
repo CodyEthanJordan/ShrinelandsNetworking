@@ -12,6 +12,11 @@ namespace Assets.Scripts.DungeonMaster
         public List<Card> Cards;
         public Card DrawnCard;
 
+        public Deck()
+        {
+            Cards = new List<Card>();
+        }
+
         public Deck(int hits, int armors, int dodges)
         {
             Cards = new List<Card>();

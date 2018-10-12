@@ -13,8 +13,10 @@ namespace Assets.Scripts.DungeonMaster
         public string Name;
         public string Description;
 
+        //TODO: types of ranges and range
+
         public abstract bool CanBeUsed(Battle battle, Unit caster);
-        public abstract List<Result> UseAbility(Battle battle, Unit caster, object targetInfo);
+        public abstract List<Result> UseAbility(Battle battle, Unit caster, object targetInfo, int? fated_outcome=null);
 
         public static object ParseTarget(Battle battle, Unit caster, string target)
         {

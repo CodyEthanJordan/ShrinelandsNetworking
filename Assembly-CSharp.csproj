@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Controllers\FSM\UninitializedStateBehaviour.cs" />
     <Compile Include="Assets\Scripts\Controllers\FSM\UnitSelectedStateBehaviour.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Abilities\Attack.cs" />
+    <Compile Include="Assets\Scripts\DungeonMaster\Abilities\Lightning.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Abilities\SlimeSpawn.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Ability.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Battle.cs" />
@@ -339,6 +340,9 @@
     <Reference Include="Boo.Lang">
       <HintPath>E:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unity/Boo.Lang.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Scripts\DungeonMaster\Maps\SmallSkirmish.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

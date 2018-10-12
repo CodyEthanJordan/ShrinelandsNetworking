@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Networking;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,11 @@ namespace Assets.Scripts.DungeonMaster
             Hit,
             Armor,
             Miss
+        }
+
+        internal void DoThing(Func<Battle, Unit, Unit, List<Result>> p)
+        {
+            throw new NotImplementedException();
         }
     }
 }
