@@ -19,14 +19,30 @@ namespace Assets.Scripts.DungeonMaster
             b.sides.Add(new Side("Dunewalkers", "#FF0000"));
 
             var robby = Unit.GetDefaultDude("Robby", b.sides[0].ID,
-                new Vector3Int(5, 5, 3));
+                new Vector3Int(4, 1, 3));
             robby.Abilities.Add(new SlimeSpawn());
             b.units.Add(robby);
+            var charlie = Unit.GetDefaultDude("Charlie", b.sides[0].ID,
+                new Vector3Int(5, 1, 3));
+            charlie.Abilities.Add(new SlimeSpawn());
+            b.units.Add(charlie);
+            var gilbert = Unit.GetDefaultDude("Gilbert", b.sides[0].ID,
+                new Vector3Int(6, 1, 3));
+            gilbert.Abilities.Add(new SlimeSpawn());
+            b.units.Add(gilbert);
+            var moe = Unit.GetDefaultDude("Moe", b.sides[0].ID,
+                new Vector3Int(7, 1, 3));
+            moe.Abilities.Add(new SlimeSpawn());
+            b.units.Add(moe);
 
             var zach = Unit.GetDefaultDude("Zach", b.sides[1].ID,
-                new Vector3Int(5, 6, 3));
+                new Vector3Int(6, 6, 5));
             zach.Abilities.Add(new Lightning());
             b.units.Add(zach);
+            var jj = Unit.GetDefaultDude("JJ", b.sides[1].ID,
+                new Vector3Int(4, 6, 5));
+            jj.Abilities.Add(new Lightning());
+            b.units.Add(jj);
 
             b.currentSide = b.sides[0];
 

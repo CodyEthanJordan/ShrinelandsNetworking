@@ -42,18 +42,19 @@ namespace Assets.Scripts.DungeonMaster
 
         public void MoveTo(Vector3Int destination, int movementCost)
         {
-            if(movementCost > this.Movement.Current)
+            if (movementCost > this.Movement.Current)
             {
                 return;
             }
             Vector3Int oldPos = Position;
             Position = destination;
             Movement.Current -= movementCost;
-            if(OnUnitMoved != null)
+
+            if (OnUnitMoved != null)
             {
                 OnUnitMoved(this, ID, oldPos, Position);
             }
-            if(OnStatsChanged != null)
+            if (OnStatsChanged != null)
             {
                 OnStatsChanged(this, this);
             }
@@ -62,8 +63,8 @@ namespace Assets.Scripts.DungeonMaster
         public static Unit GetDefaultDude(string name, Guid sideID, Vector3Int pos)
         {
             var dude = new Unit(name, sideID, pos);
-            dude.HP = new Stat(8,8);
-            dude.Movement = new Stat(5,5);
+            dude.HP = new Stat(8, 8);
+            dude.Movement = new Stat(5, 5);
             dude.Stamina = new Stat(5, 5);
             dude.Expertise = new Stat(4, 4);
             dude.Strength = new Stat(4, 4);
@@ -79,7 +80,7 @@ namespace Assets.Scripts.DungeonMaster
 
         public void HandleResult(Result result)
         {
-            switch(result.Type)
+            switch (result.Type)
             {
             }
         }
@@ -90,7 +91,7 @@ namespace Assets.Scripts.DungeonMaster
             this.HP.Current = newState.HP.Current;
             this.Movement.Max = newState.Movement.Max;
             this.Movement.Current = newState.Movement.Current;
-            if(OnStatsChanged != null)
+            if (OnStatsChanged != null)
             {
                 OnStatsChanged(this, this);
             }
@@ -139,7 +140,7 @@ namespace Assets.Scripts.DungeonMaster
             sb.AppendLine("Standing on " + b.map.StandingOn(this).Name);
 
             var blockIn = b.map.BlockAt(this.Position);
-            if(blockIn.Name != "air")
+            if (blockIn.Name != "air")
             {
                 sb.AppendLine("Inside " + blockIn.Name);
             }
@@ -150,11 +151,11 @@ namespace Assets.Scripts.DungeonMaster
         internal List<Result> MoveDirection(Battle b, Map.Direction direction)
         {
             var results = new List<Result>();
-            if(direction == Map.Direction.Up) //only swimming
+            if (direction == Map.Direction.Up) //only swimming
             {
                 var blockIn = b.map.BlockAt(this.Position);
                 var blockAbove = b.map.BlockAt(this.Position + new Vector3Int(0, 0, 1));
-                if(blockIn.Flugen && blockAbove.Flugen)
+                if (blockIn.Flugen && blockAbove.Flugen)
                 {
                     MoveTo(this.Position + new Vector3Int(0, 0, 1), 1);
                     return results;
@@ -165,12 +166,12 @@ namespace Assets.Scripts.DungeonMaster
                 var blockIn = b.map.BlockAt(this.Position);
                 var blockOn = b.map.StandingOn(this);
                 var destinationBlock = b.map.BlockAt(this.Position + Map.VectorFromDirection(direction));
-                if(destinationBlock.Solid)
+                if (destinationBlock.Solid)
                 {
                     //check for climbing
                     var blockAbove = b.map.BlockAt(this.Position + Map.VectorFromDirection(direction) +
                         new Vector3Int(0, 0, 1));
-                    if(blockAbove.Solid)
+                    if (blockAbove.Solid)
                     {
                         results.Add(new Result(Result.ResultType.InvalidAction, "blocked", "cannot move there", null));
                     }
@@ -183,10 +184,34 @@ namespace Assets.Scripts.DungeonMaster
                 }
 
                 MoveTo(this.Position + Map.VectorFromDirection(direction), blockOn.MoveCost);
+                //check for falling
+                var newBlockOn = b.map.BlockAt(this.Position + new Vector3Int(0, 0, -1));
+                if (!newBlockOn.Solid)
+                {
+                    results.AddRange(Fall(b, 0));
+                }
                 return results;
             }
 
             throw new NotImplementedException();
+        }
+
+        private List<Result> Fall(Battle b, int fallen)
+        {
+            var results = new List<Result>();
+            this.Position = this.Position + new Vector3Int(0, 0, -1);
+            var newBlockOn = b.map.BlockAt(this.Position + new Vector3Int(0, 0, -1));
+            if (!newBlockOn.Solid)
+            {
+                results.AddRange(Fall(b, fallen+1));
+                return results;
+            }
+            else
+            {
+                TakeDamage(fallen);
+                results.Add(new Result(Result.ResultType.Generic, "fall", Name + " falls and takes " + fallen + " damage", null));
+                return results;
+            }
         }
     }
 

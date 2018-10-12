@@ -28,7 +28,7 @@ namespace Assets.Scripts.DungeonMaster.Abilities
             Unit hitUnit;
             Block hitBlock;
 
-            if(offset.magnitude > 6)
+            if (offset.magnitude > 6)
             {
                 results.Add(new Result(Result.ResultType.InvalidAction, "too far", "out of range", null));
                 return results;
@@ -68,12 +68,14 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                                     Result hitResult = new Result(Result.ResultType.Deck, "hit", drawn.Description, null);
                                     hitResult.OutcomeDeck = outcome;
                                     secondaryUnit.TakeDamage(3);
+                                    results.Add(hitResult);
                                     break;
                                 case Card.CardType.Armor:
                                     break;
                                 case Card.CardType.Miss:
                                     Result missResult = new Result(Result.ResultType.Deck, "miss", drawn.Description, null);
                                     missResult.OutcomeDeck = outcome;
+                                    results.Add(missResult);
                                     break;
                                 default:
                                     break;
@@ -111,16 +113,19 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                             Result hitResult = new Result(Result.ResultType.Deck, "hit", drawn.Description, null);
                             hitResult.OutcomeDeck = outcome;
                             hitUnit.TakeDamage(7);
+                            results.Add(hitResult);
                             break;
                         case Card.CardType.Armor:
                             break;
                         case Card.CardType.Miss:
                             Result missResult = new Result(Result.ResultType.Deck, "miss", drawn.Description, null);
                             missResult.OutcomeDeck = outcome;
+                            results.Add(missResult);
                             break;
                         default:
                             break;
                     }
+                    return results;
                 }
             }
 
