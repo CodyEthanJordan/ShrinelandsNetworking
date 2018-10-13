@@ -23,6 +23,8 @@ namespace Assets.Scripts.DungeonMaster
         public bool HasActed;
         public bool SlimeImmune;
         public bool HalfMove;
+        public int ArmorCoverage;
+        public int ArmorProtection;
 
         public List<Ability> Abilities;
         public List<Buff> Buffs;
@@ -46,15 +48,15 @@ namespace Assets.Scripts.DungeonMaster
 
         public void MoveTo(Battle b, Vector3Int destination, int movementCost)
         {
-            if(!b.IsPassable(destination))
+            if (!b.IsPassable(destination))
             {
                 return;
             }
 
             var blockIn = b.map.BlockAt(this.Position);
-            if(blockIn.Name == "slime" && SlimeImmune)
+            if (blockIn.Name == "slime" && SlimeImmune)
             {
-                if(HalfMove)
+                if (HalfMove)
                 {
                     HalfMove = false;
                 }
@@ -83,12 +85,40 @@ namespace Assets.Scripts.DungeonMaster
             }
         }
 
+        internal Deck AddDodgeCards(Battle battle, Attack attack, Unit caster, Vector3Int dir, Deck deck)
+        {
+            for (int i = 0; i < ArmorCoverage; i++)
+            {
+                try
+                {
+                    var index = deck.Cards.FindIndex(c => c.Type == Card.CardType.Hit);
+                    Card armor = new Card(Card.CardType.Armor, "hit deflected by armor");
+                    deck.Cards[index] = armor;
+                }
+                catch (KeyNotFoundException)
+                {
+                    break;
+                }
+            }
+
+            Card dodge = new Card(Card.CardType.Miss, "attack dodged");
+            deck.AddCards(dodge, Stamina.Current);
+            return deck;
+        }
+
         internal int GetHitCards(Battle battle, Ability ability, Unit target, Vector3Int offset)
         {
             int totalCards = Expertise.Current;
 
             //flanking?
-
+            if (ability.Range == Ability.RangeType.Melee)
+            {
+                var flankingPartner = battle.units.FirstOrDefault(u => u.Position == this.Position + offset + offset);
+                if (flankingPartner != null && flankingPartner.SideID == this.SideID)
+                {
+                    totalCards += 2;
+                }
+            }
 
             return totalCards;
         }
@@ -238,7 +268,7 @@ namespace Assets.Scripts.DungeonMaster
             var newBlockIn = b.map.BlockAt(this.Position);
             if (!newBlockOn.Solid && !newBlockIn.Flugen)
             {
-                results.AddRange(Fall(b, fallen+1));
+                results.AddRange(Fall(b, fallen + 1));
                 return results;
             }
             else

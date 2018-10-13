@@ -46,7 +46,9 @@ namespace Assets.Scripts.DungeonMaster.Abilities
 
             Card hit = new Card(Card.CardType.Hit, "attack hits");
             int hitCards = caster.GetHitCards(battle, this, hitUnit, dir);
+            deck.AddCards(hit, hitCards);
 
+            deck = hitUnit.AddDodgeCards(battle, this, caster, dir, deck);
 
             Card outcome = deck.Draw();
             Result result;
