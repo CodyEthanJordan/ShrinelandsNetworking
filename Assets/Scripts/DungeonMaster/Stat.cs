@@ -11,7 +11,7 @@ namespace Assets.Scripts.DungeonMaster
         public int Current
         {
             get { return _current; }
-            set { _current = Math.Min(value, Max); }
+            set { _current = Math.Max(0, Math.Min(value, Max)); }
         }
         public int Max;
 

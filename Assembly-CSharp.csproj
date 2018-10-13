@@ -72,6 +72,7 @@
     <Compile Include="Assets\Scripts\DungeonMaster\Ability.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Battle.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Block.cs" />
+    <Compile Include="Assets\Scripts\DungeonMaster\Buff.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Card.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\DebugData.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Deck.cs" />

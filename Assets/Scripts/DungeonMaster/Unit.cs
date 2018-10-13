@@ -25,6 +25,7 @@ namespace Assets.Scripts.DungeonMaster
         public bool HalfMove;
 
         public List<Ability> Abilities;
+        public List<Buff> Buffs;
 
         public event UnitMovedEvent OnUnitMoved;
         public event StatsUpdatedEvent OnStatsChanged;
@@ -38,6 +39,7 @@ namespace Assets.Scripts.DungeonMaster
             this.Name = name;
             this.Position = pos;
             Abilities = new List<Ability>();
+            Buffs = new List<Buff>();
             HasActed = false;
             HalfMove = false;
         }
@@ -79,6 +81,16 @@ namespace Assets.Scripts.DungeonMaster
             {
                 OnStatsChanged(this, this);
             }
+        }
+
+        internal int GetHitCards(Battle battle, Ability ability, Unit target, Vector3Int offset)
+        {
+            int totalCards = Expertise.Current;
+
+            //flanking?
+
+
+            return totalCards;
         }
 
         public static Unit GetDefaultDude(string name, Guid sideID, Vector3Int pos)

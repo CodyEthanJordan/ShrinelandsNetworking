@@ -9,10 +9,12 @@ namespace Assets.Scripts.DungeonMaster.Abilities
 {
     public class Attack : Ability
     {
-        public Attack()
+        public Attack(int reach=2)
         {
             Name = "attack";
             Description = "basic attack on adjacent square";
+            Range = RangeType.Melee;
+            Reach = reach;
         }
 
         public override bool CanBeUsed(Battle battle, Unit caster)
@@ -40,7 +42,12 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                 return results;
             }
 
-            Deck deck = new Deck(caster.Expertise.Current, 0, hitUnit.Stamina.Current);
+            Deck deck = new Deck();
+
+            Card hit = new Card(Card.CardType.Hit, "attack hits");
+            int hitCards = caster.GetHitCards(battle, this, hitUnit, dir);
+
+
             Card outcome = deck.Draw();
             Result result;
             switch (outcome.Type)

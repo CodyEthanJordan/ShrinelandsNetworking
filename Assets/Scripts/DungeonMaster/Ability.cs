@@ -12,8 +12,8 @@ namespace Assets.Scripts.DungeonMaster
     {
         public string Name;
         public string Description;
-
-        //TODO: types of ranges and range
+        public RangeType Range;
+        public int Reach;
 
         public abstract bool CanBeUsed(Battle battle, Unit caster);
         public abstract List<Result> UseAbility(Battle battle, Unit caster, object targetInfo, int? fated_outcome=null);
@@ -45,9 +45,14 @@ namespace Assets.Scripts.DungeonMaster
                 return targetUnit.Position - caster.Position;
             }
 
-            
-
             return null;
+        }
+
+        public enum RangeType
+        {
+            Melee,
+            Rook,
+            Ranged
         }
     }
 }
