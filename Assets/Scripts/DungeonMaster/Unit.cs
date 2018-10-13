@@ -44,6 +44,8 @@ namespace Assets.Scripts.DungeonMaster
             Buffs = new List<Buff>();
             HasActed = false;
             HalfMove = false;
+            ArmorProtection = 1;
+            ArmorCoverage = 1;
         }
 
         public void MoveTo(Battle b, Vector3Int destination, int movementCost)

@@ -34,6 +34,7 @@ namespace Assets.Scripts.DungeonMaster.Abilities
             }
 
             caster.HasActed = true;
+            caster.Stamina.Current -= 1;
 
             var hitUnit = battle.units.FirstOrDefault(u => u.Position == caster.Position + dir);
             if (hitUnit == null)
@@ -60,17 +61,23 @@ namespace Assets.Scripts.DungeonMaster.Abilities
                     result.OutcomeDeck = deck;
                     hitUnit.TakeDamage(caster.Strength.Current);
                     results.Add(result);
-                    return results;
+                    break;
                 case Card.CardType.Miss:
                      result = new Result(Result.ResultType.Deck, "hit",
                         hitUnit.Name + " dodges", null);
                     result.OutcomeDeck = deck;
                     results.Add(result);
-                    return results;
+                    break;
+                case Card.CardType.Armor:
+                    result = new Result(Result.ResultType.Deck, "armor",
+                        hitUnit.Name + " takes " + (caster.Strength.Current - hitUnit.ArmorProtection) + " damage, reduced by armor", null);
+                    result.OutcomeDeck = deck;
+                    hitUnit.TakeDamage(caster.Strength.Current - hitUnit.ArmorProtection);
+                    results.Add(result);
+                    break;
             }
 
-            // TODO: log, should never get here
-            return null;
+            return results;
 
         }
     }
