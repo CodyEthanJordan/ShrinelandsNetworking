@@ -15,15 +15,18 @@ namespace ShrinelandsDiscordBot
     {
         public async Task ShowResults(CommandContext ctx, List<Result> results)
         {
+            var sb = new StringBuilder();
             foreach (var result in results)
             {
                 if (result.Type == Result.ResultType.Deck)
                 {
-                    await ctx.RespondAsync(result.OutcomeDeck.ToString());
-                    await ctx.RespondAsync(result.OutcomeDeck.DrawnCard.ToString());
+                    sb.AppendLine(result.OutcomeDeck.ToString());
+                    sb.AppendLine(result.OutcomeDeck.DrawnCard.ToString());
                 }
-                await ctx.RespondAsync(result.Description);
+                sb.AppendLine(result.Description);
             }
+
+            await ctx.RespondAsync(sb.ToString());
         }
 
         public async Task<bool> ValidPlayer(CommandContext ctx, string name)
@@ -160,53 +163,20 @@ namespace ShrinelandsDiscordBot
         [Description("Issue a move order to a unit")]
         public async Task Move(CommandContext ctx,
             [Description("name of unit")] string unitName,
-            [Description("direction to move (n,s,e,w)")] string direction)
+            [Description("direction to move (n,s,e,w)")] string directions)
         {
             bool valid = await ValidPlayer(ctx, ctx.User.Username);
             if (!valid)
             {
                 return;
             }
-            var validDirections = new List<string>() { "n", "s", "e", "w", "u", "d"};
-            var unit = Program.battle.units.FirstOrDefault(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
-            if (unit == null)
-            {
-                await ctx.RespondAsync("No unit named " + unitName);
-                return;
-            }
-            if (!validDirections.Contains(direction.ToLower()))
-            {
-                await ctx.RespondAsync("Not a valid direction: " + direction);
-                return;
-            }
+            
 
             List<Result> results = new List<Result>();
-            switch (direction.ToLower())
-            {
-                case "n":
-                    results = Program.battle.MakeMove(unit.ID, Map.Direction.North);
-                    break;
-                case "s":
-                    results = Program.battle.MakeMove(unit.ID, Map.Direction.South);
-                    break;
-                case "e":
-                    results = Program.battle.MakeMove(unit.ID, Map.Direction.East);
-                    break;
-                case "w":
-                    results = Program.battle.MakeMove(unit.ID, Map.Direction.West);
-                    break;
-                case "u":
-                    results = Program.battle.MakeMove(unit.ID, Map.Direction.Up);
-                    break;
-                case "d":
-                    results = Program.battle.MakeMove(unit.ID, Map.Direction.Down);
-                    break;
-            }
 
-            foreach (var result in results)
-            {
-                await ctx.RespondAsync(result.Description);
-            }
+            results = Program.battle.MakeMove(unitName, directions);
+
+            await ShowResults(ctx, results);
 
         }
     }

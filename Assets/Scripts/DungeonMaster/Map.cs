@@ -204,5 +204,26 @@ namespace Assets.Scripts.DungeonMaster
 
             return -1;
         }
+
+        internal static Direction ParseDirection(string dir)
+        {
+            switch(dir.ToLower())
+            {
+                case "n":
+                    return Direction.North;
+                case "s":
+                    return Direction.South;
+                case "e":
+                    return Direction.East;
+                case "w":
+                    return Direction.West;
+                case "u":
+                    return Direction.Up;
+                case "d":
+                    return Direction.Down;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
     }
 }

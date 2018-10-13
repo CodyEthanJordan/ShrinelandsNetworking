@@ -192,6 +192,23 @@ namespace Assets.Scripts.DungeonMaster
             return output;
         }
 
+        public List<Result> MakeMove(string unitName, string directions)
+        {
+            var results = new List<Result>();
+            var unit = units.First(u => u.Name.Equals(unitName, StringComparison.CurrentCultureIgnoreCase));
+            if(unit == null)
+            {
+                results.Add(new Result(Result.ResultType.InvalidAction, "no unit", "no unit named " + unitName, null));
+                return results;
+            }
+
+            foreach (var dir in directions.Split(','))
+            {
+                results.AddRange(MakeMove(unit.ID, Map.ParseDirection(dir)));
+            }
+            return results;
+        }
+
         public List<Result> MakeMove(Guid unitID, Map.Direction direction)
         {
             var unit = units.First(u => u.ID == unitID);
