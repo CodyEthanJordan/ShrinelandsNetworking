@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assets.Scripts.DungeonMaster;
 using System.Linq;
 using UnityEngine;
+using Assets.Scripts.DungeonMaster.Buffs;
 
 namespace BattleTests
 {
@@ -44,23 +45,6 @@ namespace BattleTests
         }
 
         [TestMethod]
-        public void RobbyEscapesACanyonWithFoulMagic()
-        {
-            //create ooze and swim up it
-            var b = DebugData.GetFunDebugBattle();
-            var robby = b.units.First(u => u.Name == "Robby");
-
-            //create ooze
-            //swim to edge
-            //move ooze up
-
-            //pass turn
-            //other side pass
-
-            //continue to ascend
-        }
-
-        [TestMethod]
         public void TestStringOutput()
         {
             Battle b = DebugData.GetFunDebugBattle();
@@ -71,6 +55,17 @@ namespace BattleTests
             //{
             //    file.Write(output);
             //}
+        }
+
+        [TestMethod]
+        public void StrikeFromShadowsDissipates()
+        {
+            Battle b = Battle.GetDebugBattle();
+            var robby = b.units.First(u => u.Name == "Robby");
+            robby.GainBuff(new StrikeFromShadows());
+            Assert.IsTrue(robby.Buffs.Count == 1);
+            b.MakeMove(robby.ID, Map.Direction.North);
+            Assert.IsTrue(robby.Buffs.Count == 0);
         }
 
 

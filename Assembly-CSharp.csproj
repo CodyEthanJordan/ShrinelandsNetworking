@@ -73,9 +73,11 @@
     <Compile Include="Assets\Scripts\DungeonMaster\Battle.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Block.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Buff.cs" />
+    <Compile Include="Assets\Scripts\DungeonMaster\Buffs\StrikeFromShadows.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Card.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\DebugData.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Deck.cs" />
+    <Compile Include="Assets\Scripts\DungeonMaster\Effect.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Map.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Side.cs" />
     <Compile Include="Assets\Scripts\DungeonMaster\Stat.cs" />

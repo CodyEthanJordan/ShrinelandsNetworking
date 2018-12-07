@@ -18,6 +18,13 @@ namespace Assets.Scripts.DungeonMaster
         public abstract bool CanBeUsed(Battle battle, Unit caster);
         public abstract List<Result> UseAbility(Battle battle, Unit caster, object targetInfo, int? fated_outcome=null);
 
+        private List<Result> AbilityUsed(Battle battle, Unit caster)
+        {
+            var results = new List<Result>();
+            results.AddRange(caster.UsedAbility(battle, this));
+            return results;
+        }
+
         public static object ParseTarget(Battle battle, Unit caster, string target)
         {
             switch(target.ToLower())
@@ -55,4 +62,7 @@ namespace Assets.Scripts.DungeonMaster
             Ranged
         }
     }
+
+    // ability ideas
+    // curse of slime - gives unit slime trail buff for 3 turns, leave behind slime trail when moving
 }

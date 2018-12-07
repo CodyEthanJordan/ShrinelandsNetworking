@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Assets.Scripts.DungeonMaster.Abilities;
+using Assets.Scripts.DungeonMaster.Buffs;
 using Assets.Scripts.Networking;
 using UnityEngine;
 
@@ -11,8 +12,8 @@ namespace Assets.Scripts.DungeonMaster
     public class Unit
     {
         public Guid ID;
-        public Guid SideID { get; protected set; }
-        public string Name { get; protected set; }
+        public Guid SideID;
+        public string Name;
 
         public Stat HP;
         public Stat Movement;
@@ -27,6 +28,17 @@ namespace Assets.Scripts.DungeonMaster
         public int ArmorProtection;
 
         public List<Ability> Abilities;
+
+        internal List<Result> UsedAbility(Battle battle, Ability ability)
+        {
+            var results = new List<Result>();
+            foreach (var buff in Buffs)
+            {
+                results.AddRange(buff.UnitUsedAbility(battle, this, ability));
+            }
+            return results;
+        }
+
         public List<Buff> Buffs;
 
         public event UnitMovedEvent OnUnitMoved;
@@ -48,11 +60,15 @@ namespace Assets.Scripts.DungeonMaster
             ArmorCoverage = 1;
         }
 
-        public void MoveTo(Battle b, Vector3Int destination, int movementCost)
+        public List<Result> MoveTo(Battle b, Vector3Int destination, int movementCost)
         {
+            var results = new List<Result>();
+
             if (!b.IsPassable(destination))
             {
-                return;
+                results.Add(new Result(Result.ResultType.InvalidAction, "can't move",
+                    "cannot move there", null));
+                return results;
             }
 
             var blockIn = b.map.BlockAt(this.Position);
@@ -60,7 +76,7 @@ namespace Assets.Scripts.DungeonMaster
             {
                 if (HalfMove)
                 {
-                    HalfMove = false;
+                    HalfMove = false; //TODO: check to make sure have movement to make moves
                 }
                 else
                 {
@@ -71,11 +87,20 @@ namespace Assets.Scripts.DungeonMaster
 
             if (movementCost > this.Movement.Current)
             {
-                return;
+                results.Add(new Result(Result.ResultType.Generic, "",
+                    "Not enough movement", null));
+                return results;
             }
+
             Vector3Int oldPos = Position;
             Position = destination;
             Movement.Current -= movementCost;
+
+            for (int i = 0; i < Buffs.Count; i++)
+            {
+                results.AddRange(Buffs[i].UnitMoved(b, this, oldPos, this.Position));
+            }
+            Buffs.RemoveAll(x => x == null);
 
             if (OnUnitMoved != null)
             {
@@ -85,6 +110,33 @@ namespace Assets.Scripts.DungeonMaster
             {
                 OnStatsChanged(this, this);
             }
+
+            return results;
+        }
+
+        public void GainBuff(Buff buff)
+        {
+            Buffs.Add(buff);
+        }
+
+        public static readonly int FlankingBonus = 2;
+        internal Deck AddAttackCards(Battle battle, Ability ability, Unit hitUnit, Vector3Int offset, Deck deck)
+        {
+            Card hit = new Card(Card.CardType.Hit, "attack hits");
+            deck.AddCards(hit, this.Expertise.Current);
+
+            //flanking?
+            if (ability.Range == Ability.RangeType.Melee)
+            {
+                var flankingPartner = battle.units.FirstOrDefault(u => u.Position == this.Position + offset + offset);
+                if (flankingPartner != null && flankingPartner.SideID == this.SideID)
+                {
+                    Card flankingHit = new Card(Card.CardType.Hit, "flanking");
+                    deck.AddCards(flankingHit, FlankingBonus);
+                }
+            }
+
+            return deck;
         }
 
         internal Deck AddDodgeCards(Battle battle, Attack attack, Unit caster, Vector3Int dir, Deck deck)
@@ -106,23 +158,6 @@ namespace Assets.Scripts.DungeonMaster
             Card dodge = new Card(Card.CardType.Miss, "attack dodged");
             deck.AddCards(dodge, Stamina.Current);
             return deck;
-        }
-
-        internal int GetHitCards(Battle battle, Ability ability, Unit target, Vector3Int offset)
-        {
-            int totalCards = Expertise.Current;
-
-            //flanking?
-            if (ability.Range == Ability.RangeType.Melee)
-            {
-                var flankingPartner = battle.units.FirstOrDefault(u => u.Position == this.Position + offset + offset);
-                if (flankingPartner != null && flankingPartner.SideID == this.SideID)
-                {
-                    totalCards += 2;
-                }
-            }
-
-            return totalCards;
         }
 
         public static Unit GetDefaultDude(string name, Guid sideID, Vector3Int pos)
@@ -284,4 +319,9 @@ namespace Assets.Scripts.DungeonMaster
 
     public delegate void UnitMovedEvent(object source, Guid ID, Vector3Int oldPos, Vector3Int newPos);
     public delegate void StatsUpdatedEvent(object source, Unit unit);
+
+    // unit ideas
+    // javelin viper, has leap attack to get adjacent to target, bite inflicts poison
+    // river nautilus, grabbing tentacles to pull, poison reduces stamina when not in water from spines, swimming creature
+    // represent swimming as permenant buff that reduces stamina outside water and sets movement to 0
 }

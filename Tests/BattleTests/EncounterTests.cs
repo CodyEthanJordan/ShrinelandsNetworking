@@ -17,7 +17,7 @@ namespace BattleTests
             Unit jj = b.units.First(u => u.Name == "JJ");
             Assert.IsTrue(jj.HP.Current == jj.HP.Max);
             b.MakeMove(charlie.ID, Map.Direction.North);
-            b.UseAbility(charlie.Name, "attack", "n");
+            b.UseAbility(charlie.Name, "attack", "n", 0);
             Assert.IsTrue(jj.HP.Current < jj.HP.Max);
         }
 
